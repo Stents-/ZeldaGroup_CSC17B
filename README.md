@@ -7,7 +7,7 @@ Collision Detection / Physics
 	Check if two bounding boxes have a collision
 Animations
 	An animation system so that we can do something like:
-	`entity.anim.play("Walk");
+	`entity.anim.play("Walk");`
 Enemies
 Attacking
 Inventory
