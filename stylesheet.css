@@ -1,0 +1,19 @@
+#character {
+	background-image: url("https://gamingreinvented.com/wp-content/uploads/2015/11/zelda1link.png");
+	background-repeat: no-repeat;
+	background-size: 706.25% 1150%;
+	display: block;
+	width: 20vmin;
+	height: 20vmin;
+	image-rendering: pixelated;
+	position: fixed;
+}
+
+.flipH {
+	-moz-transform: scaleX(-1);
+	-o-transform: scaleX(-1);
+	-webkit-transform: scaleX(-1);
+	transform: scaleX(-1);
+	filter: FlipH;
+	-ms-filter: "FlipH";
+}
