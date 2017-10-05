@@ -1,3 +1,5 @@
+// Basic button input bools
+// true -> pressed
 var left = false;
 var right = false;
 var up = false;
@@ -5,6 +7,11 @@ var down = false;
 var attack = false;
 var pAttack = false;
 var run = false;
+
+var mapData = { 0, 1, 1, 0};
+
+
+
 
 function Vector2(x, y) {
      this.x = x;
@@ -120,6 +127,8 @@ GameObject.prototype.draw = function(deltaTime) {
 		 }
 	 }
 	
+	
+	 //var drawPos = this.position - cam;
      this.elem.style.left = this.position.x + "vmin";
      this.elem.style.top = this.position.y + "vmin";
 	 this.elem.style.backgroundPosition = this.spriteOff.x + "% " + this.spriteOff.y + "%";
@@ -163,16 +172,7 @@ char.elem = document.getElementById('character');
 
 var lastTime;
 
-function update() {
-	// Get the delta time
-     var deltaTime = 0.0;
-     if (typeof lastTime !== "undefined") {
-          deltaTime = (Date.now() - lastTime) / 1000.0;
-     } else {
-          deltaTime = 0;
-     }
-     lastTime = Date.now();
-
+function update(deltaTime) {
 	 // Get the fps
      var fps = 1 / deltaTime;
      //console.log(fps);
@@ -227,11 +227,31 @@ function update() {
      move = move.mul(speed * deltaTime);
      char.position = char.position.add(move);
 
-     char.draw(deltaTime);
+     
 	 
 	 pAttack = attack;
 
-     requestAnimationFrame(update);
+     
 }
 
-requestAnimationFrame(update);
+function draw(deltaTime) {
+	char.draw(deltaTime);
+}
+
+function loop() {
+     // Get the delta time
+     var deltaTime = 0.0;
+     if (typeof lastTime !== "undefined") {
+          deltaTime = (Date.now() - lastTime) / 1000.0;
+     } else {
+          deltaTime = 0;
+     }
+     lastTime = Date.now();
+	
+	
+	update(deltaTime);
+	draw(deltaTime);
+	requestAnimationFrame(loop);
+}
+
+requestAnimationFrame(loop);

@@ -1,6 +1,15 @@
+
+/* Character tag */
 #character {
 	background-image: url("https://gamingreinvented.com/wp-content/uploads/2015/11/zelda1link.png");
 	background-repeat: no-repeat;
+	/* This parts a little wierd,
+	   it scales the image up so that each "tile" will fill the image container
+	   I.E. width / tileWidth * 100
+		    In thise instance:
+			16 / 113 * 100 = 706.25
+	   Same applies to height
+	   */
 	background-size: 706.25% 1150%;
 	display: block;
 	width: 20vmin;
@@ -9,6 +18,9 @@
 	position: fixed;
 }
 
+/* Flip horizontally
+   Literally just flips the image horizontally
+*/
 .flipH {
 	-moz-transform: scaleX(-1);
 	-o-transform: scaleX(-1);
