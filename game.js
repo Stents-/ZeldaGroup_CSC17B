@@ -1,245 +1,140 @@
 // Basic button input bools
 // true -> pressed
-var left = false;
-var right = false;
-var up = false;
-var down = false;
-var attack = false;
-var pAttack = false;
-var run = false;
+var input = {
+     left: false,
+     right: false,
+     up: false,
+     down: false,
+     attack: false,
+     pAttack: false, // represents the most previous state of attack
+     run: false };
 
-var mapData = { 0, 1, 1, 0};
+ var lastTime;
 
-
-
-
-function Vector2(x, y) {
-     this.x = x;
-     this.y = y;
-}
-
-// Add to a Vector2
-// Usage: vecA.add(vecB) OR vecA.add(0, 0)
-Vector2.prototype.add = function(first, second) {
-     if (typeof second !== "undefined") {
-          return new Vector2(this.x + first, this.y + second);
-     } else {
-          return new Vector2(this.x + first.x, this.y + first.y);
-     }
-};
-
-// Subtract from a Vector2
-// Usage: vecA.sub(vecB) OR vecA.sub(0, 0)
-Vector2.prototype.sub = function(first, second) {
-     if (typeof second !== "undefined") {
-          return new Vector2(this.x - first, this.y - second);
-     } else {
-          return new Vector2(this.x - first.x, this.y - first.y);
-     }
-};
-
-// Get the negation of a vector
-Vector2.prototype.neg = function() {
-     return new Vector2(-this.x, -this.y);
-}
-
-// Multiply a vectors components by a scalar
-Vector2.prototype.mul = function(scalar) {
-     return new Vector2(this.x * scalar, this.y * scalar);
-};
-
-// Get the magnitude (length) of a vector
-Vector2.prototype.magnitude = function() {
-     return Math.sqrt(this.x * this.x + this.y * this.y);
-};
-
-// Get the distance between two vectors
-Vector2.prototype.distance = function(other) {
-     return this.sub(other).magnitude();
-};
-
-// Get the normalized vector, I.E. the equivalent vector with length 1
-Vector2.prototype.normalize = function() {
-     var mag = this.magnitude();
-     if (mag === 0) {
-          return this;
-     } else {
-          return new Vector2(this.x / mag, this.y / mag);
-     }
-}
-
-// Basic GameObject class to represent all on-screen entities
-function GameObject(name) {
-     this.name = name;                      // Simple name identifier
-     this.position = new Vector2(0.0, 0.0); // Position in world space of object
-     this.velocity = new Vector2(0.0, 0.0); // Velocity
-	 this.spriteOff = new Vector2(0, 0);
-     this.size = new Vector2(100.0, 100.0); // Width and Height of the object
-     this.elem = null;                      // DOM object
-	 this.dir = 3;
-	 this.animStage = 0;
-	 this.animTimer = 0;
-	 this.isWalking = false;
-	 this.isAttacking = false;
-}
-
-// Simply update the position of the corresponding element
-GameObject.prototype.draw = function(deltaTime) {
-	 var offY = 0;
-	 if (this.isAttacking) {
-		 this.animTimer += deltaTime;
-		 if (this.animTimer > 0.1) {
-			 this.animStage = 1;
-		 }
-		 if (this.animTimer > 0.2) {
-			 this.isAttacking = false;
-		 }
-		 
-		 offY = 60 + 24 * this.animStage;
-		 switch (this.dir) {
-			 case 0: this.spriteOff = new Vector2(0, offY / 168 * 100); break;
-			 case 1: this.spriteOff = new Vector2(30 / 97 * 100, offY / 168 * 100); break;
-			 case 2: this.spriteOff = new Vector2(60 / 97 * 100, offY / 168 * 100); break;
-		     case 3: this.spriteOff = new Vector2(30 / 97 * 100, offY / 168 * 100); break;
-		 }
-
-	 } else {
-	 
-		 if (this.isWalking) {
-			 this.animTimer += deltaTime;
-			 if (this.animTimer > 0.2) {
-				 this.animTimer -= 0.2;
-				 console.log("Switched frame");
-				 this.animStage = !this.animStage;
-			 }
-			 
-			 offY = 30 * this.animStage;
-		 } else {
-			 this.animTimer = 0;
-		 }
-
-		
-		 switch (this.dir) {
-			 case 0: this.spriteOff = new Vector2(0, offY / 168 * 100); break;
-			 case 1: this.spriteOff = new Vector2(30 / 97 * 100, offY / 168 * 100); break;
-			 case 2: this.spriteOff = new Vector2(60 / 97 * 100, offY / 168 * 100); break;
-			 case 3: this.spriteOff = new Vector2(30 / 97 * 100, offY / 168 * 100); break;
-		 }
-	 }
-	
-	
-	 //var drawPos = this.position - cam;
-     this.elem.style.left = this.position.x + "vmin";
-     this.elem.style.top = this.position.y + "vmin";
-	 this.elem.style.backgroundPosition = this.spriteOff.x + "% " + this.spriteOff.y + "%";
-
-}
-
+// Basic event listereners to update the corresponding value in 'input'
+// This way 'input' will always contain the state of each button.
+// http://keycode.info/ to get keycodes
 document.addEventListener('keydown', function(event) {
     if(event.keyCode == 37) {
-         left = true;
+         input.left = true;
     } else if(event.keyCode == 39) {
-         right = true;
+         input.right = true;
     } else if(event.keyCode == 40) {
-         down = true;
+         input.down = true;
     } else if(event.keyCode == 38) {
-         up = true;
+         input.up = true;
     } else if(event.keyCode == 32) {
-         attack = true;
+         input.attack = true;
     } else if(event.keyCode == 16) {
-         run = true;
+         input.run = true;
     }
 });
 
 document.addEventListener('keyup', function(event) {
     if(event.keyCode == 37) {
-         left = false;
+         input.left = false;
     } else if(event.keyCode == 39) {
-         right = false;
+         input.right = false;
     } else if(event.keyCode == 40) {
-         down = false;
+         input.down = false;
     } else if(event.keyCode == 38) {
-         up = false;
+         input.up = false;
     } else if(event.keyCode == 32) {
-         attack = false;
+         input.attack = false;
     } else if(event.keyCode == 16) {
-         run = false;
+         input.run = false;
     }
 });
 
-var char = new GameObject("Player");
-char.elem = document.getElementById('character');
+// Instance the player
+var player = new Player("Player");
 
-var lastTime;
+// Since none of the code generates HTML yet we
+// just get the preextisting html object
+player.elem = document.getElementById("player");
 
+// All game logic, physics, input, ai, etc
 function update(deltaTime) {
-	 // Get the fps
+	 // Get the fps, just cause
      var fps = 1 / deltaTime;
-     //console.log(fps);
 
-     var speed = 50;
-	 if (run) speed *= 4;
+     var speed = 50; // Walk speed of the player
+	if (input.run) speed *= 4;
      var move = new Vector2(0, 0); // How much the player will move
-	 
-	 // Add to the move vector based on input
 
-	 if (attack && !pAttack) {
-		 char.isAttacking = true;
-		 char.isWalking = false;
-		 char.animTimer = 0;
-		 char.animStage = 0;
-	 }
-	 
-	 if (!char.isAttacking) {
-		 if (left) {
-			  move = move.sub(1, 0);
-			  char.dir = 3;
-			  char.elem.className = "";
-		 }
+     // If the player just hit the attack button, prepare for the attack
+     // Check both attack and !pAttack so we can know this is the first frame
+     // that the attack button was pressed
+     if (input.attack && !input.pAttack) {
+          player.isAttacking = true;
+          player.isWalking = false;
+          player.animTimer = 0;
+          player.animStage = 0;
+     }
 
-		 if (right) {
-			  move = move.add(1, 0);
-			  char.dir = 1;
-			  // flip it somehow
-			  char.elem.className = "flipH";
-		 }
+     if (!player.isAttacking) {
+          // Add to the move vector based on input
+          if (input.left) {
+               move = move.sub(1, 0);
+               player.dir = 3; // Set the direction
+               player.elem.className = "";
+          }
 
-		 if (up) {
-			  move = move.sub(0, 1);
-			  char.dir = 2;
-			  char.elem.className = "";
-		 }
-		 
-		 if (down) {
-			  move = move.add(0, 1);
-			  char.dir = 0;
-			  char.elem.className = "";
-		 }
-		 
-		 if (move.magnitude() > 0) {
-			 char.isWalking = true;
-		 } else {
-			 char.isWalking = false;
-		 }
-	 }
-	 
+          if (input.right) {
+               move = move.add(1, 0);
+               player.dir = 1;
+               player.elem.className = "flipH"; // Flip the sprite horizontally
+          }
+
+          if (input.up) {
+               move = move.sub(0, 1);
+               player.dir = 2;
+               player.elem.className = "";
+          }
+
+          if (input.down) {
+               move = move.add(0, 1);
+               player.dir = 0;
+               player.elem.className = "";
+          }
+
+          // Only play the walking animation if the walk vector isn't 0
+          if (move.magnitude() > 0) {
+               player.isWalking = true;
+          } else {
+               player.isWalking = false;
+          }
+     }
+
      move = move.normalize(); // Normalize so that diagonal movement isn't faster
+
+     // We multiply the move vector by the speed and deltaTime
+     // We do deltaTime so that the movement will remain consistent despite frame rate fluctuation
+     // Basically it means we move in units per second, not units per frame
      move = move.mul(speed * deltaTime);
-     char.position = char.position.add(move);
 
-     
-	 
-	 pAttack = attack;
+     player.position = player.position.add(move); // Finally add the move vector the player position
 
-     
+	input.pAttack = input.attack;
 }
 
 function draw(deltaTime) {
-	char.draw(deltaTime);
+     // Only one object to draw
+     // In the future there will probably be an array of GameObjects
+     // which will be iterated to call .draw() on each
+     // Will also need to handle a moving camera
+	player.draw(deltaTime);
+
+     // TODO: Map drawing
 }
 
+// Main loop function
+// Called as often as it can be
 function loop() {
      // Get the delta time
+     // This is just the time that has passed since the last loop() call
+     // in seconds
+     // It will typically be 1/60
      var deltaTime = 0.0;
      if (typeof lastTime !== "undefined") {
           deltaTime = (Date.now() - lastTime) / 1000.0;
@@ -247,11 +142,17 @@ function loop() {
           deltaTime = 0;
      }
      lastTime = Date.now();
-	
-	
+
+     // Call the update function, all game logic, physics, input, ai, etc
 	update(deltaTime);
+
+     // Draw the changes
+     // Really this just updates the CSS of the HTML objects
 	draw(deltaTime);
+
+     // Let the browser update and then recall the loop function
 	requestAnimationFrame(loop);
 }
 
+// Jump into the loop
 requestAnimationFrame(loop);
