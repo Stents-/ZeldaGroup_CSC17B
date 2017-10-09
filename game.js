@@ -6,11 +6,52 @@ var input = {
      up: false,
      down: false,
      attack: false,
-     pAttack: false, // represents the most previous state of attack
+     run: false };
+
+// Previous state of input
+var pInput = {
+     left: false,
+     right: false,
+     up: false,
+     down: false,
+     attack: false,
      run: false };
 
  var lastTime;
+ 
+ var objs = [];
+ 
+// Calculate the scaling factor
+var scaleFact;
 
+function calcScaling() {
+	var viewport = new Vector2(window.innerWidth, window.innerHeight);
+	var min;
+	var des;
+	if (viewport.x <= viewport.y) {
+		min = viewport.x;
+		des = 256;
+	} else {
+		min = viewport.y;
+		des = 225;
+	}
+	
+	scaleFact = Math.floor(min / des);
+	if (scaleFact < 1) scaleFact = 1;
+	
+	console.log(scaleFact);
+	if (player) {
+		player.elem.style.width = scaleFact * 16 + "px";
+		player.elem.style.height = scaleFact * 16 + "px";
+		player.elem.style.backgroundSize = scaleFact * 113 + "px " + scaleFact * 184 + "px";
+	}
+}
+
+window.onload = calcScaling;
+
+window.onresize = calcScaling;
+ 
+ 
 // Basic event listereners to update the corresponding value in 'input'
 // This way 'input' will always contain the state of each button.
 // http://keycode.info/ to get keycodes
@@ -57,71 +98,23 @@ player.elem = document.getElementById("player");
 function update(deltaTime) {
 	 // Get the fps, just cause
      var fps = 1 / deltaTime;
-
-     var speed = 50; // Walk speed of the player
-	if (input.run) speed *= 4;
-     var move = new Vector2(0, 0); // How much the player will move
-
-     // If the player just hit the attack button, prepare for the attack
-     // Check both attack and !pAttack so we can know this is the first frame
-     // that the attack button was pressed
-     if (input.attack && !input.pAttack) {
-          player.isAttacking = true;
-          player.isWalking = false;
-          player.animTimer = 0;
-          player.animStage = 0;
-     }
-
-     if (!player.isAttacking) {
-          // Add to the move vector based on input
-          if (input.left) {
-               move = move.sub(1, 0);
-               player.dir = 3; // Set the direction
-               player.elem.className = "";
-          }
-
-          if (input.right) {
-               move = move.add(1, 0);
-               player.dir = 1;
-               player.elem.className = "flipH"; // Flip the sprite horizontally
-          }
-
-          if (input.up) {
-               move = move.sub(0, 1);
-               player.dir = 2;
-               player.elem.className = "";
-          }
-
-          if (input.down) {
-               move = move.add(0, 1);
-               player.dir = 0;
-               player.elem.className = "";
-          }
-
-          // Only play the walking animation if the walk vector isn't 0
-          if (move.magnitude() > 0) {
-               player.isWalking = true;
-          } else {
-               player.isWalking = false;
-          }
-     }
-
-     move = move.normalize(); // Normalize so that diagonal movement isn't faster
-
-     // We multiply the move vector by the speed and deltaTime
-     // We do deltaTime so that the movement will remain consistent despite frame rate fluctuation
-     // Basically it means we move in units per second, not units per frame
-     move = move.mul(speed * deltaTime);
-
-     player.position = player.position.add(move); // Finally add the move vector the player position
-
-	input.pAttack = input.attack;
+	 //console.log(fps);
+	 
+	 player.update(deltaTime);
+	 
+	 for (i = 0; i < objs.length; i++) {
+		 objs[i].update(deltaTime);
+	 }
+	 
+	 pInput = Object.assign(pInput, input);
 }
 
 function draw(deltaTime) {
-     // Only one object to draw
-     // In the future there will probably be an array of GameObjects
-     // which will be iterated to call .draw() on each
+	for (i = 0; i < objs.length; i++) {
+		objs[i].draw(deltaTime);
+	}
+	
+	
      // Will also need to handle a moving camera
 	player.draw(deltaTime);
 
@@ -144,15 +137,15 @@ function loop() {
      lastTime = Date.now();
 
      // Call the update function, all game logic, physics, input, ai, etc
-	update(deltaTime);
+	 update(deltaTime);
 
      // Draw the changes
      // Really this just updates the CSS of the HTML objects
-	draw(deltaTime);
+	 draw(deltaTime);
 
      // Let the browser update and then recall the loop function
-	requestAnimationFrame(loop);
+	 requestAnimationFrame(loop);
 }
 
-// Jump into the loop
+// Jump into the loop, start the game
 requestAnimationFrame(loop);

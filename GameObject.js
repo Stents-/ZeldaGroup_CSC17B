@@ -26,7 +26,14 @@ function GameObject(name) {
      // spriteWidth is the width of each individual sprite in pixels
      // and pixelXOffset is how many pixels we want to offset
      // This same stuff applies to the y value and the height
+	 
+	 this.elem = document.createElement("div");
+	 this.elem.class = "gameobject";
+	 
+	 
 }
+
+GameObject.prototype.update = function(deltaTime) {}; // Nothing for now
 
 // Simply update the position of the corresponding element
 GameObject.prototype.draw = function(deltaTime) {

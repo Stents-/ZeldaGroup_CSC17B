@@ -5,6 +5,7 @@
 function EntityLiving() {
      GameObject.call(this);
      this.health = 10;
+	 this.moveSpeed = 50;
 }
 
 // Inherit from GameObject
@@ -28,6 +29,64 @@ function Player() {
 // Inherit from EntityLiving
 Player.prototype = Object.create(EntityLiving.prototype);
 Player.prototype.constructor = Player;
+
+Player.prototype.update = function(deltaTime) {
+	 if (input.run) speed *= 4;
+     var move = new Vector2(0, 0); // How much the player will move
+
+     // If the player just hit the attack button, prepare for the attack
+     // Check both attack and !pAttack so we can know this is the first frame
+     // that the attack button was pressed
+     if (input.attack && !pInput.attack) {
+          player.isAttacking = true;
+          player.isWalking = false;
+          player.animTimer = 0;
+          player.animStage = 0;
+     }
+
+     if (!player.isAttacking) {
+          // Add to the move vector based on input
+          if (input.left) {
+               move = move.sub(1, 0);
+               player.dir = 3; // Set the direction
+               player.elem.className = "";
+          }
+
+          if (input.right) {
+               move = move.add(1, 0);
+               player.dir = 1;
+               player.elem.className = "flipH"; // Flip the sprite horizontally
+          }
+
+          if (input.up) {
+               move = move.sub(0, 1);
+               player.dir = 2;
+               player.elem.className = "";
+          }
+
+          if (input.down) {
+               move = move.add(0, 1);
+               player.dir = 0;
+               player.elem.className = "";
+          }
+
+          // Only play the walking animation if the walk vector isn't 0
+          if (move.magnitude() > 0) {
+               player.isWalking = true;
+          } else {
+               player.isWalking = false;
+          }
+     }
+
+     move = move.normalize(); // Normalize so that diagonal movement isn't faster
+
+     // We multiply the move vector by the speed and deltaTime
+     // We do deltaTime so that the movement will remain consistent despite frame rate fluctuation
+     // Basically it means we move in units per second, not units per frame
+     move = move.mul(this.moveSpeed * deltaTime);
+
+     player.position = player.position.add(move); // Finally add the move vector to the player position
+}
 
 Player.prototype.draw = function(deltaTime) {
      // Animate the sprite
@@ -56,7 +115,6 @@ Player.prototype.draw = function(deltaTime) {
                this.animTimer += deltaTime;
                if (this.animTimer > 0.2) {
                     this.animTimer -= 0.2;
-                    console.log("Switched frame");
                     this.animStage = !this.animStage;
                }
 
