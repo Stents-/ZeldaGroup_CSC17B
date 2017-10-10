@@ -5,7 +5,7 @@
 function EntityLiving() {
      GameObject.call(this);
      this.health = 10;
-	 this.moveSpeed = 50;
+	 this.moveSpeed = 100;
 }
 
 // Inherit from GameObject
