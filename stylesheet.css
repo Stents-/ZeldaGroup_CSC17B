@@ -1,5 +1,5 @@
 /* Character tag */
-#gameobject {
+.gameobject {
 	background-repeat: no-repeat;
 	display: block;
 	image-rendering: pixelated;

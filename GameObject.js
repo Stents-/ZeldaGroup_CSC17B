@@ -29,7 +29,7 @@ function GameObject(name) {
 
     // Generate the DOM object
 	this.elem = document.createElement("div");
-	this.elem.class = "gameobject";
+	this.elem.className = "gameobject";
 }
 
 GameObject.prototype.update = function(deltaTime) {}; // Nothing for now

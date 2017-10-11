@@ -31,7 +31,8 @@ Player.prototype = Object.create(EntityLiving.prototype);
 Player.prototype.constructor = Player;
 
 Player.prototype.update = function(deltaTime) {
-	 if (input.run) speed *= 4;
+	var speed = this.moveSpeed;
+	 if (input.run) speed *= 2;
      var move = new Vector2(0, 0); // How much the player will move
 
      // If the player just hit the attack button, prepare for the attack
@@ -83,7 +84,7 @@ Player.prototype.update = function(deltaTime) {
      // We multiply the move vector by the speed and deltaTime
      // We do deltaTime so that the movement will remain consistent despite frame rate fluctuation
      // Basically it means we move in units per second, not units per frame
-     move = move.mul(this.moveSpeed * deltaTime);
+     move = move.mul(speed * deltaTime);
 
      player.position = player.position.add(move); // Finally add the move vector to the player position
 }
