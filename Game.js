@@ -99,18 +99,21 @@ document.addEventListener('keyup', function(event) {
 });
 
 // Instance the player
+scaleFact = 4;
 var player = new Player("Player");
+
 var obj1 = new GameObject("one");
 obj1.size = new Vector2(10, 10);
 obj1.position = new Vector2(30, 30);
 document.body.appendChild(obj1.elem);
 obj1.elem.style.backgroundColor = "blue";
-obj1.elem.style.width = obj1.size.x * scaleFact + "px";
-obj1.elem.style.height = obj1.size.y * scaleFact + "px";
+obj1.elem.style.width = (obj1.size.x * scaleFact) + "px";
+obj1.elem.style.height = (obj1.size.y * scaleFact) + "px";
 
 var obj2 = new GameObject("two");
 obj2.size = new Vector2(10, 10);
 obj2.position = new Vector2(30, 90);
+obj2.velocity = new Vector2(0, -70);
 document.body.appendChild(obj2.elem);
 obj2.elem.style.backgroundColor = "red";
 obj2.elem.style.width = obj2.size.x * scaleFact + "px";
@@ -126,6 +129,7 @@ player.elem = document.getElementById("player");
 
 // All game logic, physics, input, ai, etc
 function update(deltaTime) {
+	
     // Get the fps, just cause
     var fps = 1 / deltaTime;
     //console.log(fps);
@@ -142,7 +146,7 @@ function update(deltaTime) {
         //objs[i].p(deltaTime);
     }*/
 	
-	var vel = new Vector2();
+	phys(obj2, obj1, deltaTime);
 	
 
     pInput = Object.assign(pInput, input);
