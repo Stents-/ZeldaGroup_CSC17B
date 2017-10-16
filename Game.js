@@ -113,7 +113,7 @@ obj1.elem.style.height = (obj1.size.y * scaleFact) + "px";
 var obj2 = new GameObject("two");
 obj2.size = new Vector2(10, 10);
 obj2.position = new Vector2(30, 90);
-obj2.velocity = new Vector2(0, -70);
+obj2.velocity = new Vector2(5, -140);
 document.body.appendChild(obj2.elem);
 obj2.elem.style.backgroundColor = "red";
 obj2.elem.style.width = obj2.size.x * scaleFact + "px";
@@ -129,25 +129,20 @@ player.elem = document.getElementById("player");
 
 // All game logic, physics, input, ai, etc
 function update(deltaTime) {
-	
-    // Get the fps, just cause
-    var fps = 1 / deltaTime;
-    //console.log(fps);
-    if (fps < 50) console.log("Stutter " + fps);
 
     player.update(deltaTime);
 
     for (i = 0; i < objs.length; i++) {
         objs[i].update(deltaTime);
     }
-	
+
 	/*
 	for (i = 0; i < objs.length; i++) {
         //objs[i].p(deltaTime);
     }*/
-	
+
 	phys(obj2, obj1, deltaTime);
-	
+
 
     pInput = Object.assign(pInput, input);
 }
@@ -179,6 +174,11 @@ function loop() {
     }
     lastTime = Date.now();
 
+    // Get the fps, just cause
+    var fps = 1 / deltaTime;
+    if (fps < 50) console.log("Stutter " + deltaTime * 1000 + " ms");
+
+
     // Call the update function, all game logic, physics, input, ai, etc
     update(deltaTime);
 
@@ -188,6 +188,7 @@ function loop() {
 
     // Let the browser update and then recall the loop function
     requestAnimationFrame(loop);
+
 }
 
 // Jump into the loop, start the game
