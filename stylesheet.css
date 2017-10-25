@@ -35,3 +35,14 @@
 	filter: FlipH;
 	-ms-filter: "FlipH";
 }
+
+#map{
+	position: absolute;
+}
+
+.tile{
+	image-rendering: pixelated;
+	position: relative;
+	float: left;
+	background-image: url(tilesheet.gif);
+}

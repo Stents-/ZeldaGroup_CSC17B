@@ -24,6 +24,60 @@ var objs = [];
 // Calculate the scaling factor
 var scaleFact;
 
+
+function Tile(classN, _offX, _offY) {
+	this.elem = document.createElement('div');
+	this.elem.className = classN + " tile"
+	this.offX = _offX;
+	this.offY = _offY;
+}
+
+var mapArray=[  [3,4,2,0,0,0,0,0,0,0],
+				[2,2,0,0,0,0,0,0,1,0],
+				[2,1,0,0,0,0,0,0,0,0],
+				[0,0,0,0,0,0,0,0,0,0],
+				[0,0,0,0,0,0,0,0,0,0],
+				[0,0,0,0,0,0,1,0,0,0],
+				[0,0,0,0,0,0,0,0,0,0],
+				[0,0,1,0,0,0,0,0,0,0],
+				[0,0,0,0,0,0,0,0,0,0], 
+				[0,0,0,0,0,0,0,1,0,0] ];
+				
+				
+var tiles = [];
+
+function drawMap(){
+	var cont = document.getElementById('map');
+	cont.style.height = mapArray.length * 16 * scaleFact;
+	cont.style.width = mapArray[0].length * 16 * scaleFact;
+	
+	for (var i = 0; i < mapArray.length; i++) {
+		for (var j = 0; j < mapArray[i].length; j++) {
+			if(mapArray[i][j] == 0) {
+				var t = new Tile("glass", -3, 0);
+				cont.appendChild(t.elem);
+				tiles.push(t);
+			} else if(mapArray[i][j] == 1) {
+				var t = new Tile("bush", -3, -1);
+				cont.appendChild(t.elem);
+				tiles.push(t);
+			} else if(mapArray[i][j] == 2) {
+				var t = new Tile("dirt", -1, -1);
+				cont.appendChild(t.elem);
+				tiles.push(t);
+			} else if(mapArray[i][j] == 3) {
+				var t = new Tile("dirt", 0, 0);
+				cont.appendChild(t.elem);
+				tiles.push(t);
+			} else if(mapArray[i][j] == 4) {
+				var t = new Tile("dirt", -1, 0);
+				cont.appendChild(t.elem);
+				tiles.push(t);
+			}
+		}
+	}
+}
+
 function calcScaling() {
     var oldFact = scaleFact; // Save the scale factor before we change it
     var min; // The smaller viewport dimension in px
@@ -48,6 +102,20 @@ function calcScaling() {
     if (scaleFact !== oldFact) {
         // Resize the elements
         console.log(scaleFact);
+		
+		// Resize the map
+		var cont = document.getElementById('map');
+		cont.style.height = mapArray.length * 16 * scaleFact + "px";
+		cont.style.width = mapArray[0].length * 16 * scaleFact + "px";
+	
+		for (var i = 0; i < tiles.length; i++) {
+			tiles[i].elem.style.width = scaleFact * 16 + "px";
+			tiles[i].elem.style.height = scaleFact * 16 + "px";
+			tiles[i].elem.style.backgroundSize = scaleFact * 16 * 16 + "px " + scaleFact * 16 * 13 + "px";
+			tiles[i].elem.style.backgroundPosition = scaleFact * 16 * tiles[i].offX + "px " + scaleFact * 16 * tiles[i].offY + "px";
+		}
+		
+		
         if (player) {
             // TODO: Once anim system has been implemented we'll use
             // the cell dimensions and sheet dimensions instead of constants
@@ -58,7 +126,10 @@ function calcScaling() {
     }
 }
 
-window.onload = calcScaling;
+window.onload = function () {
+	calcScaling();
+	drawMap();
+}
 
 window.onresize = calcScaling;
 
