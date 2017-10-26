@@ -6,8 +6,12 @@
 	position: fixed;
 }
 
+body {
+	overflow: hidden;
+}
+
 #player {
-	background-image: url("https://gamingreinvented.com/wp-content/uploads/2015/11/zelda1link.png");
+	background-image: url("link_sheet.png");
 	background-repeat: no-repeat;
 	/* This parts a little wierd,
 	   it scales the image up so that each "tile" will fill the image container

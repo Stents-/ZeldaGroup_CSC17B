@@ -39,7 +39,8 @@ GameObject.prototype.draw = function(deltaTime) {
     // We want to use a unit that is uniform across both the x and y axis
     // Thats why it uses vmin, if it screws up how we do scaling
     // we can use a different unit
-    this.elem.style.left = scaleFact * this.position.x + "px";
-    this.elem.style.top = scaleFact * this.position.y + "px";
+    var pos = this.position.sub(camPos);
+    this.elem.style.left = scaleFact * pos.x + "px";
+    this.elem.style.top = scaleFact * pos.y + "px";
 	this.elem.style.backgroundPosition = this.spriteOff.x + "% " + this.spriteOff.y + "%";
 }

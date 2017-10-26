@@ -32,57 +32,101 @@ function Tile(classN, _offX, _offY) {
 	this.offY = _offY;
 }
 
-var mapArray=[  [3,4,2,0,0,0,0,0,0,0],
-				[2,2,0,0,0,0,0,0,1,0],
-				[2,1,0,0,0,0,0,0,0,0],
-				[0,0,0,0,0,0,0,0,0,0],
-				[0,0,0,0,0,0,0,0,0,0],
-				[0,0,0,0,0,0,1,0,0,0],
-				[0,0,0,0,0,0,0,0,0,0],
-				[0,0,1,0,0,0,0,0,0,0],
-				[0,0,0,0,0,0,0,0,0,0], 
-				[0,0,0,0,0,0,0,1,0,0] ];
-				
-				
+var mapArray=[  [3, 4, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0,11, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        				[6, 2, 7, 0, 0, 0,11, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0,11, 0, 0, 0, 0, 0, 0],
+        				[8, 9,10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0,11, 0],
+        				[0, 0, 0, 0, 0, 0, 0, 0, 3, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 5, 0, 0, 0, 0, 0],
+        				[0, 0, 0, 0, 0, 0, 0, 0, 6, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 7, 0, 0, 0, 0, 0],
+        				[0, 0, 0, 0,11, 0, 1, 0, 8, 9, 9, 9, 9,17, 2,16, 9, 9, 9, 9, 9, 9, 9, 9,10, 0, 0, 0, 0, 0],
+        				[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6, 2, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        				[0, 0, 1, 0,12,13, 0, 0, 0, 0, 0,11, 0, 6, 2, 7, 0, 0, 0, 0, 0, 0, 0,12,13, 0, 0, 0, 0, 0],
+        				[0, 0, 0, 0,14,15, 0, 0, 0, 0, 0, 0, 0, 6, 2, 7, 0, 0, 0, 0, 0, 0, 0,14,15, 0, 0, 1, 0, 0],
+        				[0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 6, 2, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        				[0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 6, 2, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        				[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6, 2, 7, 0, 0,11, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        				[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6, 2, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        				[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 8, 9,10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        				[0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        				[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        				[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,11, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        				[0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,11, 0, 0, 0, 0],
+        				[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,12,13, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        				[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,14,15, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        				[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0],
+        				[0, 0, 0,11, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        				[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        				[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,11, 0, 0, 0, 0, 1, 0, 0],
+        				[0, 0, 0, 0, 0, 0, 0, 0, 0, 0,11, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        				[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        				[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] ];
+
+
 var tiles = [];
 
 function drawMap(){
 	var cont = document.getElementById('map');
 	cont.style.height = mapArray.length * 16 * scaleFact;
 	cont.style.width = mapArray[0].length * 16 * scaleFact;
-	
+
 	for (var i = 0; i < mapArray.length; i++) {
 		for (var j = 0; j < mapArray[i].length; j++) {
+      var t;
 			if(mapArray[i][j] == 0) {
-				var t = new Tile("glass", -3, 0);
-				cont.appendChild(t.elem);
-				tiles.push(t);
+				t = new Tile("glass", -3, 0);
 			} else if(mapArray[i][j] == 1) {
-				var t = new Tile("bush", -3, -1);
-				cont.appendChild(t.elem);
-				tiles.push(t);
+				t = new Tile("bush", -3, -1);
 			} else if(mapArray[i][j] == 2) {
-				var t = new Tile("dirt", -1, -1);
-				cont.appendChild(t.elem);
-				tiles.push(t);
+				t = new Tile("dirt", -1, -1);
 			} else if(mapArray[i][j] == 3) {
-				var t = new Tile("dirt", 0, 0);
-				cont.appendChild(t.elem);
-				tiles.push(t);
+				t = new Tile("dirt", 0, 0);
 			} else if(mapArray[i][j] == 4) {
-				var t = new Tile("dirt", -1, 0);
-				cont.appendChild(t.elem);
-				tiles.push(t);
+				t = new Tile("dirt", -1, 0);
+			} else if(mapArray[i][j] == 5) {
+				t = new Tile("dirt", -2, 0);
+			} else if(mapArray[i][j] == 6) {
+				t = new Tile("dirt", 0, -1);
+			} else if(mapArray[i][j] == 7) {
+				t = new Tile("dirt", -2, -1);
+			} else if(mapArray[i][j] == 8) {
+				t = new Tile("dirt", 0, -2);
+			} else if(mapArray[i][j] == 9) {
+				t = new Tile("dirt", -1, -2);
+			} else if(mapArray[i][j] == 10) {
+				t = new Tile("dirt", -2, -2);
+			} else if(mapArray[i][j] == 11) {
+				t = new Tile("dirt", -3, -4);
+			} else if(mapArray[i][j] == 12) {
+				t = new Tile("dirt", -2, 4);
+			} else if(mapArray[i][j] == 13) {
+				t = new Tile("dirt", -3, 4);
+			} else if(mapArray[i][j] == 14) {
+				t = new Tile("dirt", -2, 3);
+			} else if(mapArray[i][j] == 15) {
+				t = new Tile("dirt", -3, 3);
+			} else if(mapArray[i][j] == 16) {
+				t = new Tile("dirt", 0, -3);
+			} else if(mapArray[i][j] == 17) {
+				t = new Tile("dirt", -1, -3);
+			} else if(mapArray[i][j] == 18) {
+				t = new Tile("dirt", 0, -4);
+			} else if(mapArray[i][j] == 19) {
+				t = new Tile("dirt", -1, -4);
 			}
+
+      cont.appendChild(t.elem);
+      tiles.push(t);
 		}
 	}
 }
+
+var viewport = new Vector2(0, 0);
 
 function calcScaling() {
     var oldFact = scaleFact; // Save the scale factor before we change it
     var min; // The smaller viewport dimension in px
     var des; // "desired" viewport dimension in px
 
+    viewport = new Vector2(window.innerWidth, window.innerHeight);
     // Find the right values
     if (window.innerWidth <= window.innerHeight) {
         min = window.innerWidth;
@@ -102,20 +146,20 @@ function calcScaling() {
     if (scaleFact !== oldFact) {
         // Resize the elements
         console.log(scaleFact);
-		
+
 		// Resize the map
 		var cont = document.getElementById('map');
 		cont.style.height = mapArray.length * 16 * scaleFact + "px";
 		cont.style.width = mapArray[0].length * 16 * scaleFact + "px";
-	
+
 		for (var i = 0; i < tiles.length; i++) {
 			tiles[i].elem.style.width = scaleFact * 16 + "px";
 			tiles[i].elem.style.height = scaleFact * 16 + "px";
 			tiles[i].elem.style.backgroundSize = scaleFact * 16 * 16 + "px " + scaleFact * 16 * 13 + "px";
 			tiles[i].elem.style.backgroundPosition = scaleFact * 16 * tiles[i].offX + "px " + scaleFact * 16 * tiles[i].offY + "px";
 		}
-		
-		
+
+
         if (player) {
             // TODO: Once anim system has been implemented we'll use
             // the cell dimensions and sheet dimensions instead of constants
@@ -127,8 +171,8 @@ function calcScaling() {
 }
 
 window.onload = function () {
-	calcScaling();
 	drawMap();
+	calcScaling();
 }
 
 window.onresize = calcScaling;
@@ -176,7 +220,7 @@ var player = new Player("Player");
 var obj1 = new GameObject("one");
 obj1.size = new Vector2(10, 10);
 obj1.position = new Vector2(30, 30);
-document.body.appendChild(obj1.elem);
+//document.body.appendChild(obj1.elem);
 obj1.elem.style.backgroundColor = "blue";
 obj1.elem.style.width = (obj1.size.x * scaleFact) + "px";
 obj1.elem.style.height = (obj1.size.y * scaleFact) + "px";
@@ -185,7 +229,7 @@ var obj2 = new GameObject("two");
 obj2.size = new Vector2(10, 10);
 obj2.position = new Vector2(30, 90);
 obj2.velocity = new Vector2(5, -140);
-document.body.appendChild(obj2.elem);
+//document.body.appendChild(obj2.elem);
 obj2.elem.style.backgroundColor = "red";
 obj2.elem.style.width = obj2.size.x * scaleFact + "px";
 obj2.elem.style.height = obj2.size.y * scaleFact + "px";
@@ -197,6 +241,8 @@ objs.push(obj2);
 // Since none of the code generates HTML yet we
 // just get the preextisting html object
 player.elem = document.getElementById("player");
+
+var camPos = new Vector2(0, 0);
 
 // All game logic, physics, input, ai, etc
 function update(deltaTime) {
@@ -222,10 +268,32 @@ function draw(deltaTime) {
 	for (i = 0; i < objs.length; i++) {
 		objs[i].draw(deltaTime);
 	}
+  //camPos = new Vector2(player.position.x - viewport.x / (2 * scaleFact), player.position.y - viewport.y / (2 * scaleFact));
 
+  if (player.position.x < camPos.x + viewport.x / (3 * scaleFact)) {
+    camPos.x = player.position.x - viewport.x / (3 * scaleFact);
+  }
+
+  if (player.position.x > camPos.x + 2 * viewport.x / (3 * scaleFact)) {
+    camPos.x = player.position.x - 2 * viewport.x / (3 * scaleFact);
+  }
+
+  if (player.position.y < camPos.y + viewport.y / (3 * scaleFact)) {
+    camPos.y = player.position.y - viewport.y / (3 * scaleFact);
+  }
+
+  if (player.position.y > camPos.y + 2 * viewport.y / (3 * scaleFact)) {
+    camPos.y = player.position.y - 2 * viewport.y / (3 * scaleFact);
+  }
 
      // Will also need to handle a moving camera
 	player.draw(deltaTime);
+
+  var cont = document.getElementById('map');
+
+
+  cont.style.left = -camPos.x * scaleFact + "px";
+  cont.style.top = -camPos.y * scaleFact + "px";
 
     // TODO: Map drawing
 }
