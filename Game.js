@@ -159,7 +159,8 @@ function calcScaling() {
 			tiles[i].elem.style.backgroundPosition = scaleFact * 16 * tiles[i].offX + "px " + scaleFact * 16 * tiles[i].offY + "px";
 		}
 
-
+		for (var i = 0; i < objs.length; i++) {
+		}
         if (player) {
             // TODO: Once anim system has been implemented we'll use
             // the cell dimensions and sheet dimensions instead of constants
@@ -220,7 +221,7 @@ var player = new Player("Player");
 var obj1 = new GameObject("one");
 obj1.size = new Vector2(10, 10);
 obj1.position = new Vector2(30, 30);
-//document.body.appendChild(obj1.elem);
+document.body.appendChild(obj1.elem);
 obj1.elem.style.backgroundColor = "blue";
 obj1.elem.style.width = (obj1.size.x * scaleFact) + "px";
 obj1.elem.style.height = (obj1.size.y * scaleFact) + "px";
@@ -229,7 +230,7 @@ var obj2 = new GameObject("two");
 obj2.size = new Vector2(10, 10);
 obj2.position = new Vector2(30, 90);
 obj2.velocity = new Vector2(5, -140);
-//document.body.appendChild(obj2.elem);
+document.body.appendChild(obj2.elem);
 obj2.elem.style.backgroundColor = "red";
 obj2.elem.style.width = obj2.size.x * scaleFact + "px";
 obj2.elem.style.height = obj2.size.y * scaleFact + "px";
