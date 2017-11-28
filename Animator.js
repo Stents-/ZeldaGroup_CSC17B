@@ -5,12 +5,13 @@ function Animation() {
 }
 
 function Animator() {
+    this.sheetURL = "";
 	this.timer = 0;
 	this.frame = 0;
 	this.anims = [];
-	this.sheet = new Vector2(0, 0);
-	this.cell = new Vector2(0, 0);
-	this.cells = new Vector2(0, 0);
+	this.sheet = new Vector2(0, 0); // Size of spritesheet in px
+	this.cell = new Vector2(0, 0); // Size of each cell in px
+	this.cells = new Vector2(0, 0); // Number of cells
 }
 
 Animator.prototype.update(deltaTime) {
