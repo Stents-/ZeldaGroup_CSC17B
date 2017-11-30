@@ -34,6 +34,20 @@ function GameObject(name) {
 
 GameObject.prototype.update = function(deltaTime) {}; // Nothing for now
 
+GameObject.prototype.collide = function(obj) {
+	// For arrow
+	if (obj is enemy) {
+		damage enemy
+		delete self
+	}
+	
+	if (timer > 3.0f) {
+		create damage area
+		delete self
+	}
+	
+}
+
 // Simply update the position of the corresponding element
 GameObject.prototype.draw = function(deltaTime) {
     // We want to use a unit that is uniform across both the x and y axis

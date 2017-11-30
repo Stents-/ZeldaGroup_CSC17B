@@ -123,4 +123,9 @@ function phys(obj1, obj2, deltaTime) {
 	} else {
 		return t2;
 	}
+	
+	if (collision happened) {
+		obj1.collide(obj2);
+		obj2.collide(obj1);
+	}
 }

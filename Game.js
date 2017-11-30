@@ -113,6 +113,10 @@ function drawMap(){
 				t = new Tile("dirt", -1, -4);
 			}
 
+      t.elem.style.width = scaleFact * 16 + "px";
+      t.elem.style.height = scaleFact * 16 + "px";
+      t.elem.style.backgroundSize = scaleFact * 16 * 16 + "px " + scaleFact * 16 * 13 + "px";
+      t.elem.style.backgroundPosition = scaleFact * 16 * t.offX + "px " + scaleFact * 16 * t.offY + "px";
       cont.appendChild(t.elem);
       tiles.push(t);
 		}
@@ -172,12 +176,11 @@ function calcScaling() {
 }
 
 window.onload = function () {
-	drawMap();
 	calcScaling();
+	drawMap();
 }
 
 window.onresize = calcScaling;
-
 
 // Basic event listereners to update the corresponding value in 'input'
 // This way 'input' will always contain the state of each button.
@@ -215,7 +218,6 @@ document.addEventListener('keyup', function(event) {
 });
 
 // Instance the player
-scaleFact = 4;
 var player = new Player("Player");
 
 var obj1 = new GameObject("one");
