@@ -23,6 +23,19 @@ EntityLiving.prototype.damage = function(amount) {
 
 function Player() {
      EntityLiving.call(this);
+     this.animator = new Animator(link, this);
+     this.elem.style.backgroundImage = "url('" + this.animator.sheetURL + "')";
+     this.size = new Vector2(16, 10);
+     this.spriteSize = this.animator.cell;
+
+     this.dir = 3;                          // Represents the direction
+      // 0 -> down
+      // 1 -> right
+      // 2 -> up
+      // 3 -> left
+
+     this.elem.style.zIndex = 10;
+
      // TODO: Add inventory
 }
 
@@ -50,25 +63,21 @@ Player.prototype.update = function(deltaTime) {
           if (input.left) {
                move = move.sub(1, 0);
                player.dir = 3; // Set the direction
-               player.elem.className = "";
           }
 
           if (input.right) {
                move = move.add(1, 0);
                player.dir = 1;
-               player.elem.className = "flipH"; // Flip the sprite horizontally
           }
 
           if (input.up) {
                move = move.sub(0, 1);
                player.dir = 2;
-               player.elem.className = "";
           }
 
           if (input.down) {
                move = move.add(0, 1);
                player.dir = 0;
-               player.elem.className = "";
           }
 
           // Only play the walking animation if the walk vector isn't 0
@@ -90,8 +99,8 @@ Player.prototype.update = function(deltaTime) {
 }
 
 Player.prototype.draw = function(deltaTime) {
-     // Animate the sprite
-     var offY = 0;
+    // Animate the sprite
+     /*var offY = 0;
      if (this.isAttacking) {
           this.animTimer += deltaTime;
           if (this.animTimer > 0.1) {
@@ -131,8 +140,15 @@ Player.prototype.draw = function(deltaTime) {
                case 2: this.spriteOff = new Vector2(60 / 97 * 100, offY / 168 * 100); break;
                case 3: this.spriteOff = new Vector2(30 / 97 * 100, offY / 168 * 100); break;
           }
-     }
+     }*/
 
-     // Call the base version of the draw
-     GameObject.prototype.draw.call(this, deltaTime);
+    this.animator.setAnim("walk_right");
+    this.animator.play()
+
+    this.animator.update(deltaTime, this);
+
+    // Call the base version of the draw
+    GameObject.prototype.draw.call(this, deltaTime);
+
+ 	this.elem.style.backgroundPosition = -this.sprite.x + "px " + -this.sprite.y + "px";
 }
