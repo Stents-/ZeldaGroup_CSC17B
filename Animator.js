@@ -41,7 +41,14 @@ function Animator(an, obj) {
 
 Animator.prototype.update = function(deltaTime, obj) {
 	this.timer += deltaTime;
+	
+			
     if(this.playing) {
+		
+		if (this.frame > this.anim.nFrames - 1) {
+			this.frame = 0;
+		}
+		
     	if (this.timer >= this.anim.intervals[this.frame]) {
     		this.timer -= this.anim.intervals[this.frame];
     		this.frame++;
@@ -89,6 +96,16 @@ var link = {
     "cell":[20, 26],    // Size of each cell in px
     "cells":[0,0],
     "anims": {
+		"idle_up": {
+            "loop": true,
+            "nFrames": 1,
+            "intervals": [0.1],
+            "frames": [[0,0]] },
+		"idle_down": {
+            "loop": true,
+            "nFrames": 1,
+            "intervals": [0.1],
+            "frames": [[0,1]] },
         "idle_left": {
             "loop": true,
             "nFrames": 1,
@@ -109,5 +126,10 @@ var link = {
             "nFrames": 8,
             "intervals": [0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1],
             "frames": [[0,3], [1,3], [2,3], [3,3], [4,3], [5,3], [6, 3], [7, 3]] },
+		"walk_up": {
+            "loop": true,
+            "nFrames": 8,
+            "intervals": [0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1],
+            "frames": [[0,1], [1,1], [2,1], [3,1], [4,1], [5,1], [6, 1], [7, 1]] },
         }
 };

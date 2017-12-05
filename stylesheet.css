@@ -4,6 +4,7 @@
 	display: block;
 	image-rendering: pixelated;
 	position: fixed;
+    filter: grayscale(100%);
 }
 
 body {

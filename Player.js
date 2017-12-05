@@ -25,6 +25,9 @@ function Player() {
      EntityLiving.call(this);
      this.animator = new Animator(link, this);
      this.elem.style.backgroundImage = "url('" + this.animator.sheetURL + "')";
+	 
+     this.animator.setAnim("idle_down");
+	 
      this.size = new Vector2(16, 10);
      this.spriteSize = this.animator.cell;
 
@@ -43,6 +46,13 @@ function Player() {
 Player.prototype = Object.create(EntityLiving.prototype);
 Player.prototype.constructor = Player;
 
+Player.prototype.bomb = function() {
+	var b = new Bomb();
+	b.position = in front of player;
+	
+	objs.push(b);
+}
+
 Player.prototype.update = function(deltaTime) {
 	var speed = this.moveSpeed;
 	 if (input.run) speed *= 2;
@@ -58,6 +68,16 @@ Player.prototype.update = function(deltaTime) {
           player.animStage = 0;
      }
 
+	 
+	 if (input.use && !pInput.use) {
+		 // Call item function
+		 if (bow equiped) {
+			 // Bow function
+		 } else if (bomb equipped) {
+			 // Bomb function
+		 }
+	 }
+	 
      if (!player.isAttacking) {
           // Add to the move vector based on input
           if (input.left) {
@@ -83,8 +103,26 @@ Player.prototype.update = function(deltaTime) {
           // Only play the walking animation if the walk vector isn't 0
           if (move.magnitude() > 0) {
                player.isWalking = true;
+			   if (this.dir == 0) {
+				   //this.animator.setAnim("walk_down");
+			   } else if (this.dir == 1) {
+				   this.animator.setAnim("walk_right");
+			   } else if (this.dir == 2) {
+				   this.animator.setAnim("walk_up");
+			   } else if (this.dir == 3) {
+				   this.animator.setAnim("walk_left");
+			   }
           } else {
                player.isWalking = false;
+			   if (this.dir == 0) {
+				   this.animator.setAnim("idle_down");
+			   } else if (this.dir == 1) {
+				   this.animator.setAnim("idle_right");
+			   } else if (this.dir == 2) {
+				   this.animator.setAnim("idle_up");
+			   } else if (this.dir == 3) {
+				   this.animator.setAnim("idle_left");
+			   }
           }
      }
 
@@ -142,7 +180,7 @@ Player.prototype.draw = function(deltaTime) {
           }
      }*/
 
-    this.animator.setAnim("walk_right");
+    
     this.animator.play()
 
     this.animator.update(deltaTime, this);

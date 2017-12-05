@@ -6,7 +6,7 @@ var input = {
     up: false,
     down: false,
     attack: false,
-    run: false };
+    use: false };
 
 // Previous state of input
 var pInput = {
@@ -15,7 +15,7 @@ var pInput = {
     up: false,
     down: false,
     attack: false,
-    run: false };
+    use: false };
 
 // Basic event listereners to update the corresponding value in 'input'
 // This way 'input' will always contain the state of each button.
@@ -32,7 +32,7 @@ document.addEventListener('keydown', function(event) {
     } else if(event.keyCode == 32) {
          input.attack = true;
     } else if(event.keyCode == 16) {
-         input.run = true;
+         input.use = true;
     }
 });
 
@@ -48,6 +48,6 @@ document.addEventListener('keyup', function(event) {
     } else if(event.keyCode == 32) {
          input.attack = false;
     } else if(event.keyCode == 16) {
-         input.run = false;
+         input.use = false;
     }
 });

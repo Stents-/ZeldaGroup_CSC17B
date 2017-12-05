@@ -33,6 +33,9 @@ var mapArray=[  [3, 4, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0,11, 0, 0, 0, 0, 0, 0, 0, 0, 
 				[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
 				[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] ];
 
+var collisionMap = [];
+				
+				
 var tiles = [];
 
 function drawMap(){
@@ -44,9 +47,11 @@ function drawMap(){
 		for (var j = 0; j < mapArray[i].length; j++) {
       var t;
 			if(mapArray[i][j] == 0) {
-				t = new Tile("glass", -3, 0);
+				t = new Tile("grass", -3, 0);
+				collisionMap.push(false);
 			} else if(mapArray[i][j] == 1) {
 				t = new Tile("bush", -3, -1);
+				collisionMap.push(true);
 			} else if(mapArray[i][j] == 2) {
 				t = new Tile("dirt", -1, -1);
 			} else if(mapArray[i][j] == 3) {
@@ -69,12 +74,16 @@ function drawMap(){
 				t = new Tile("dirt", -3, -4);
 			} else if(mapArray[i][j] == 12) {
 				t = new Tile("dirt", -2, 4);
+				collisionMap.push(true);
 			} else if(mapArray[i][j] == 13) {
 				t = new Tile("dirt", -3, 4);
+				collisionMap.push(true);
 			} else if(mapArray[i][j] == 14) {
 				t = new Tile("dirt", -2, 3);
+				collisionMap.push(true);
 			} else if(mapArray[i][j] == 15) {
 				t = new Tile("dirt", -3, 3);
+				collisionMap.push(true);
 			} else if(mapArray[i][j] == 16) {
 				t = new Tile("dirt", 0, -3);
 			} else if(mapArray[i][j] == 17) {
@@ -94,5 +103,10 @@ function drawMap(){
 		}
 	}
 }
+
+function tileCollide() {
+	
+}
+
 
 var viewport = new Vector2(0, 0);

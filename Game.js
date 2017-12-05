@@ -96,11 +96,21 @@ function update(deltaTime) {
         objs[i].update(deltaTime);
     }
 
-	/*
+	
+	
+	
+	
 	for (i = 0; i < objs.length; i++) {
-        //objs[i].p(deltaTime);
-    }*/
+		//for (int j = 0; j < collisionMap.length; j++) {
+			
+		//}
+		
+		
+		
+    }
 
+	
+	
 	phys(obj2, obj1, deltaTime);
 
 
