@@ -23,15 +23,11 @@ EntityLiving.prototype.damage = function(amount) {
 
 function Player() {
      EntityLiving.call(this);
-     this.animator = new Animator(link, this);
-     this.elem.style.backgroundImage = "url('" + this.animator.sheetURL + "')";
-	 
-     this.animator.setAnim("idle_down");
-	 
      this.size = new Vector2(16, 10);
-     this.spriteSize = this.animator.cell;
+     this.animator = new Animator(linkAnim, this);
+     this.animator.setAnim("idle_down");
 
-     this.dir = 3;                          // Represents the direction
+     this.dir = 0;                          // Represents the direction
       // 0 -> down
       // 1 -> right
       // 2 -> up
@@ -46,65 +42,90 @@ function Player() {
 Player.prototype = Object.create(EntityLiving.prototype);
 Player.prototype.constructor = Player;
 
-Player.prototype.bomb = function() {
+/*Player.prototype.bomb = function() {
 	var b = new Bomb();
 	b.position = in front of player;
-	
+
 	objs.push(b);
-}
+}*/
 
 Player.prototype.update = function(deltaTime) {
-	var speed = this.moveSpeed;
-	 if (input.run) speed *= 2;
+	 var speed = this.moveSpeed;
+
+
      var move = new Vector2(0, 0); // How much the player will move
 
      // If the player just hit the attack button, prepare for the attack
      // Check both attack and !pAttack so we can know this is the first frame
      // that the attack button was pressed
-     if (input.attack && !pInput.attack) {
-          player.isAttacking = true;
-          player.isWalking = false;
-          player.animTimer = 0;
-          player.animStage = 0;
+     if (input.attack && !pInput.attack && !this.animator.anim.name.startsWith("attack")) {
+         var forward;
+         if (this.dir == 0) {
+             this.animator.setAnim("attack_down");
+             forward = new Vector2(0, 1);
+         } else if (this.dir == 1) {
+             this.animator.setAnim("attack_right");
+             forward = new Vector2(1, 0);
+         } else if (this.dir == 2) {
+             this.animator.setAnim("attack_up");
+             forward = new Vector2(0, -1);
+         } else if (this.dir == 3) {
+             this.animator.setAnim("attack_left");
+             forward = new Vector2(-1, 0);
+         }
+         // Create damage box
      }
 
-	 
+
 	 if (input.use && !pInput.use) {
-		 // Call item function
+		 /*// Call item function
 		 if (bow equiped) {
 			 // Bow function
 		 } else if (bomb equipped) {
 			 // Bomb function
-		 }
+		 }*/
 	 }
-	 
-     if (!player.isAttacking) {
+
+     if (this.animator.anim.name.startsWith("attack") && this.animator.playing == false) {
+          if (this.dir == 0) {
+              this.animator.setAnim("idle_down");
+          } else if (this.dir == 1) {
+              this.animator.setAnim("idle_right");
+          } else if (this.dir == 2) {
+              this.animator.setAnim("idle_up");
+          } else if (this.dir == 3) {
+              this.animator.setAnim("idle_left");
+          }
+          this.animator.play();
+     }
+
+
+     if (!this.animator.anim.name.startsWith("attack")) {
           // Add to the move vector based on input
           if (input.left) {
                move = move.sub(1, 0);
-               player.dir = 3; // Set the direction
+               this.dir = 3; // Set the direction
           }
 
           if (input.right) {
                move = move.add(1, 0);
-               player.dir = 1;
+               this.dir = 1;
           }
 
           if (input.up) {
                move = move.sub(0, 1);
-               player.dir = 2;
+               this.dir = 2;
           }
 
           if (input.down) {
                move = move.add(0, 1);
-               player.dir = 0;
+               this.dir = 0;
           }
 
           // Only play the walking animation if the walk vector isn't 0
           if (move.magnitude() > 0) {
-               player.isWalking = true;
 			   if (this.dir == 0) {
-				   //this.animator.setAnim("walk_down");
+				   this.animator.setAnim("walk_down");
 			   } else if (this.dir == 1) {
 				   this.animator.setAnim("walk_right");
 			   } else if (this.dir == 2) {
@@ -113,7 +134,6 @@ Player.prototype.update = function(deltaTime) {
 				   this.animator.setAnim("walk_left");
 			   }
           } else {
-               player.isWalking = false;
 			   if (this.dir == 0) {
 				   this.animator.setAnim("idle_down");
 			   } else if (this.dir == 1) {
@@ -180,13 +200,11 @@ Player.prototype.draw = function(deltaTime) {
           }
      }*/
 
-    
-    this.animator.play()
-
+    this.animator.play();
     this.animator.update(deltaTime, this);
+
+ 	this.elem.style.backgroundPosition = -this.sprite.x + "px " + -this.sprite.y + "px";
 
     // Call the base version of the draw
     GameObject.prototype.draw.call(this, deltaTime);
-
- 	this.elem.style.backgroundPosition = -this.sprite.x + "px " + -this.sprite.y + "px";
 }

@@ -4,7 +4,13 @@
 	display: block;
 	image-rendering: pixelated;
 	position: fixed;
-    filter: grayscale(100%);
+}
+
+.colBox {
+	display: block;
+	position: fixed;
+    border: 1px solid blue;
+    z-index: 10;
 }
 
 body {

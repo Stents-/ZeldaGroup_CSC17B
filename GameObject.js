@@ -7,12 +7,18 @@ function GameObject(name) {
 
     this.spriteSize = new Vector2(0, 0); // Size of sprite
     this.spriteOff = new Vector2(0, 0); // Offset of sprite from center of object
-    this.sprite = new Vector2(0, 0) // Pixels to offset sprite on sheet
+    this.sprite = new Vector2(0, 0); // Pixels to offset sprite on sheet
 
     // Generate the DOM object
 	this.elem = document.createElement("div");
 	this.elem.className = "gameobject";
     document.body.appendChild(this.elem);
+
+    if (colBoxes) {
+        this.box = document.createElement("div");
+        this.box.className = "colBox";
+        document.body.appendChild(this.box);
+    }
 }
 
 GameObject.prototype.update = function(deltaTime) {}; // Nothing for now
@@ -36,11 +42,21 @@ GameObject.prototype.resize = function() {
     this.elem.style.width = scaleFact * this.spriteSize.x + "px";
     this.elem.style.height = scaleFact * this.spriteSize.y + "px";
     this.elem.style.backgroundSize = scaleFact * this.spriteSize.x + "px " + scaleFact * this.spriteSize.y + "px";
+
+    if (colBoxes) {
+        this.box.style.width = scaleFact * this.size.x - 2 + "px";
+        this.box.style.height = scaleFact * this.size.y - 2 + "px";
+    }
 }
 
 // Simply update the position of the corresponding element
 GameObject.prototype.draw = function(deltaTime) {
     var pos = this.position.sub(camPos);
-    this.elem.style.left = scaleFact * pos.x + "px";
-    this.elem.style.top = scaleFact * pos.y + "px";
+    this.elem.style.left = scaleFact * (pos.x + this.spriteOff.x) + "px";
+    this.elem.style.top = scaleFact * (pos.y + this.spriteOff.y) + "px";
+
+    if (colBoxes) {
+        this.box.style.left = scaleFact * pos.x + "px";
+        this.box.style.top = scaleFact * pos.y + "px";
+    }
 }

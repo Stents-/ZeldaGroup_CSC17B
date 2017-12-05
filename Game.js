@@ -4,6 +4,8 @@ var objs = []; // List of all GameObjects
 
 var scaleFact; // Amount to scale
 
+var colBoxes = true;
+
 // Calculate the scaling factor
 function calcScaling() {
     var oldFact = scaleFact; // Save the scale factor before we change it
@@ -46,8 +48,10 @@ function calcScaling() {
 		for (var i = 0; i < objs.length; i++) {
             objs[i].elem.style.width = scaleFact * objs[i].spriteSize.x + "px";
             objs[i].elem.style.height = scaleFact * objs[i].spriteSize.y + "px";
+            objs[i].resize();
 		}
         if (player) {
+            player.resize();
             player.elem.style.width = scaleFact * player.spriteSize.x + "px";
             player.elem.style.height = scaleFact * player.spriteSize.y + "px";
             player.elem.style.backgroundSize = scaleFact * player.animator.sheet.x + "px " + scaleFact * player.animator.sheet.y + "px";
@@ -96,21 +100,21 @@ function update(deltaTime) {
         objs[i].update(deltaTime);
     }
 
-	
-	
-	
-	
+
+
+
+
 	for (i = 0; i < objs.length; i++) {
 		//for (int j = 0; j < collisionMap.length; j++) {
-			
+
 		//}
-		
-		
-		
+
+
+
     }
 
-	
-	
+
+
 	phys(obj2, obj1, deltaTime);
 
 
