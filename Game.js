@@ -4,7 +4,7 @@ var objs = []; // List of all GameObjects
 
 var scaleFact; // Amount to scale
 
-var colBoxes = false;
+var colBoxes = true;
 
 // Calculate the scaling factor
 function calcScaling() {

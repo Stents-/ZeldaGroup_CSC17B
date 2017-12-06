@@ -41,8 +41,8 @@ var tiles = [];
 var mapFlags = {
 	room1clr: false,
 	room2clr: false,
-	entered: false;
-}
+	entered: false
+};
 
 
 function drawMap(){
