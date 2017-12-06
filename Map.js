@@ -34,9 +34,16 @@ var mapArray=[  [3, 4, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0,11, 0, 0, 0, 0, 0, 0, 0, 0, 
 				[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] ];
 
 var collisionMap = [];
-				
-				
+
+
 var tiles = [];
+
+var mapFlags = {
+	room1clr: false,
+	room2clr: false,
+	entered: false;
+}
+
 
 function drawMap(){
 	var cont = document.getElementById('map');
@@ -105,7 +112,7 @@ function drawMap(){
 }
 
 function tileCollide() {
-	
+
 }
 
 

@@ -5,6 +5,7 @@
 function EntityLiving() {
      GameObject.call(this);
      this.health = 10;
+     this.immunity = 0; // immunity timer
 	 this.moveSpeed = 100;
 }
 
@@ -14,11 +15,18 @@ EntityLiving.prototype.constructor = EntityLiving;
 
 // Just damage the living entity
 EntityLiving.prototype.damage = function(amount) {
-     this.health -= amount;
-     if (this.health <= 0) {
-          // Entity dead
-          // Do something
-     }
+    if (this.immunity > 0) {
+         this.health -= amount;
+         this.immunity = 2;
+         if (this.health <= 0) {
+              // Entity dead
+              // Do something
+         }
+    }
+}
+
+EntityLiving.prototype.update = function(deltaTime) {
+    if (this.immunity > 0) this.immunity -= deltaTime;
 }
 
 function Player() {
@@ -59,21 +67,31 @@ Player.prototype.update = function(deltaTime) {
      // Check both attack and !pAttack so we can know this is the first frame
      // that the attack button was pressed
      if (input.attack && !pInput.attack && !this.animator.anim.name.startsWith("attack")) {
-         var forward;
+         var pos;
+         var size;
          if (this.dir == 0) {
              this.animator.setAnim("attack_down");
-             forward = new Vector2(0, 1);
+             pos = new Vector2(-5, 3);
+             size = new Vector2(30, 20);
          } else if (this.dir == 1) {
              this.animator.setAnim("attack_right");
-             forward = new Vector2(1, 0);
+             pos = new Vector2(12, -15);
+             size = new Vector2(20, 30);
          } else if (this.dir == 2) {
              this.animator.setAnim("attack_up");
-             forward = new Vector2(0, -1);
+             pos = new Vector2(-9, -24);
+             size = new Vector2(30, 20);
          } else if (this.dir == 3) {
              this.animator.setAnim("attack_left");
-             forward = new Vector2(-1, 0);
+             pos = new Vector2(-16, -15);
+             size = new Vector2(20, 30);
          }
          // Create damage box
+         var db = new DmgBox(this, 1/5, 10);
+         db.position = this.position.add(pos);
+         db.size = size;
+         objs.push(db);
+
      }
 
 
@@ -154,6 +172,9 @@ Player.prototype.update = function(deltaTime) {
      move = move.mul(speed * deltaTime);
 
      player.position = player.position.add(move); // Finally add the move vector to the player position
+
+
+     EntityLiving.prototype.update.call(this, deltaTime);
 }
 
 Player.prototype.draw = function(deltaTime) {

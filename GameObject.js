@@ -58,5 +58,7 @@ GameObject.prototype.draw = function(deltaTime) {
     if (colBoxes) {
         this.box.style.left = scaleFact * pos.x + "px";
         this.box.style.top = scaleFact * pos.y + "px";
+            this.box.style.width = scaleFact * this.size.x - 2 + "px";
+            this.box.style.height = scaleFact * this.size.y - 2 + "px";
     }
 }

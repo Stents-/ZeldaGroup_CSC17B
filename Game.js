@@ -4,7 +4,7 @@ var objs = []; // List of all GameObjects
 
 var scaleFact; // Amount to scale
 
-var colBoxes = true;
+var colBoxes = false;
 
 // Calculate the scaling factor
 function calcScaling() {
@@ -90,6 +90,19 @@ objs.push(obj2);
 
 // Camera position
 var camPos = new Vector2(0, 0);
+
+
+function delObject(obj) {
+
+    document.body.removeChild(obj.elem);
+
+    if (colBoxes) {
+        document.body.removeChild(obj.box);
+    }
+
+    objs.splice(objs.indexOf(obj), 1);
+}
+
 
 // All game logic, physics, input, ai, etc
 function update(deltaTime) {
