@@ -62,3 +62,7 @@ GameObject.prototype.draw = function(deltaTime) {
             this.box.style.height = scaleFact * this.size.y - 2 + "px";
     }
 }
+
+
+
+var p = window["GameObject"]();

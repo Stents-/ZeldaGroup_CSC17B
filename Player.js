@@ -86,6 +86,8 @@ Player.prototype.update = function(deltaTime) {
              pos = new Vector2(-16, -15);
              size = new Vector2(20, 30);
          }
+		 aud.play();
+		 
          // Create damage box
          var db = new DmgBox(this, 1/5, 10);
          db.position = this.position.add(pos);

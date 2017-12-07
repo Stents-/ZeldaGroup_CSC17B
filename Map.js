@@ -5,6 +5,12 @@ function Tile(classN, _offX, _offY) {
 	this.offY = _offY;
 }
 
+var enemMap1 = {
+	pos: [ [1,1], [10, 7] ],
+	enemies: [ "Enemy1", "Enemy2"],
+	
+};
+
 var mapArray=[  [3, 4, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0,11, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
 				[6, 2, 7, 0, 0, 0,11, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0,11, 0, 0, 0, 0, 0, 0],
 				[8, 9,10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0,11, 0],
@@ -41,7 +47,8 @@ var tiles = [];
 var mapFlags = {
 	room1clr: false,
 	room2clr: false,
-	entered: false
+	entered: false,
+	currentRm: 1,
 };
 
 

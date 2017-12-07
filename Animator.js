@@ -45,31 +45,27 @@ function Animator(animSet, obj) {
 
 Animator.prototype.update = function(deltaTime, obj) {
 	this.timer += deltaTime;
+	
+	if (this.frame > this.anim.nFrames - 1) {
+		this.frame = 0;
+	}
 
-
-    if(this.playing) {
-
+	while (this.playing && this.timer >= this.anim.intervals[this.frame]) {
+		this.timer -= this.anim.intervals[this.frame];
+		this.frame++;
 		if (this.frame > this.anim.nFrames - 1) {
-			this.frame = 0;
+			if (this.anim.loop) {
+				this.frame = 0;
+			} else {
+				this.playing = false;
+			}
 		}
-
-    	if (this.timer >= this.anim.intervals[this.frame]) {
-    		this.timer -= this.anim.intervals[this.frame];
-    		this.frame++;
-            if (this.frame > this.anim.nFrames - 1) {
-                if (this.anim.loop) {
-                    this.frame = 0;
-                } else {
-                    this.playing = false;
-                }
-            }
-            if (this.playing) {
-                // Update
-                obj.sprite = new Vector2(this.anim.frames[this.frame].x * this.cell.x * scaleFact,
-                                         this.anim.frames[this.frame].y * this.cell.y * scaleFact);
-            }
-    	}
-    }
+		if (this.playing) {
+			// Update
+			obj.sprite = new Vector2(this.anim.frames[this.frame].x * this.cell.x * scaleFact,
+									 this.anim.frames[this.frame].y * this.cell.y * scaleFact);
+		}
+	}
 
 
 }
