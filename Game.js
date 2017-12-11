@@ -31,7 +31,7 @@ function calcScaling() {
     // if the factor changed, resize all elements
     if (scaleFact !== oldFact) {
         // Resize the elements
-        console.log(scaleFact);
+        //console.log(scaleFact);
 
 		// Resize the map
 		var cont = document.getElementById('map');
@@ -68,25 +68,29 @@ window.onresize = calcScaling;
 
 // Instance the player
 var player = new Player("Player");
+objs.push(player);
 
 var obj1 = new GameObject("one");
 obj1.size = new Vector2(10, 10);
-obj1.position = new Vector2(30, 30);
-document.body.appendChild(obj1.elem);
+obj1.position = new Vector2(30, 100);
+//obj1.velocity = new Vector2(140, -20);
 obj1.elem.style.backgroundColor = "blue";
 obj1.elem.style.width = (obj1.size.x * scaleFact) + "px";
 obj1.elem.style.height = (obj1.size.y * scaleFact) + "px";
 
 var obj2 = new GameObject("two");
 obj2.size = new Vector2(10, 10);
-obj2.position = new Vector2(30, 90);
-obj2.velocity = new Vector2(5, -140);
-document.body.appendChild(obj2.elem);
+obj2.position = new Vector2(100, 90);
+obj2.velocity = new Vector2(-140, 20);
 obj2.elem.style.backgroundColor = "red";
 obj2.elem.style.width = obj2.size.x * scaleFact + "px";
 obj2.elem.style.height = obj2.size.y * scaleFact + "px";
 objs.push(obj1);
 objs.push(obj2);
+
+var gob = new Goblin();
+gob.position = new Vector2(300, 100);
+objs.push(gob);
 
 // Camera position
 var camPos = new Vector2(0, 0);
@@ -106,30 +110,66 @@ function delObject(obj) {
 
 // All game logic, physics, input, ai, etc
 function update(deltaTime) {
-
-    player.update(deltaTime);
-
     for (i = 0; i < objs.length; i++) {
         objs[i].update(deltaTime);
     }
 
-
-
-
-
+    // Physics
 	for (i = 0; i < objs.length; i++) {
-		//for (int j = 0; j < collisionMap.length; j++) {
-
-		//}
 
 
+        if (objs[i].canCollide == false) {
+            for (j = 0; j < objs.length; j++) {
+                if (i != j) {
+                    if (collides(objs[i], objs[j])) {
+                        objs[i].collide(objs[j]);
+                        objs[j].collide(objs[i]);
+                    }
+                }
+            }
+        } else {
 
+            var t = -1;
+            var hit;
+            for (j = 0; j < objs.length; j++) {
+                if (i != j && objs[j].canCollide == true) {
+                    var _t = phys(objs[i], objs[j], deltaTime);
+                    if (_t >= 0 && (_t < t || t < 0)) {
+                        t = _t;
+                        hit = objs[j];
+                    }
+                }
+            }
+
+            for (var j = 0; j < collisionMap.length; j++) {
+                for (var k = 0; k < collisionMap[j].length; k++) {
+                    if (collisionMap[j][k] == true) {
+                        // Create a spoof gameobject for the phys function
+                        var temp = {position: new Vector2(k * 16, j * 16), size: new Vector2(16,16)};
+                        var _t = phys(objs[i], temp, deltaTime);
+                        if (_t >= 0 && (_t < t || t < 0)) {
+                            t = _t;
+                            hit = null;
+                        }
+                    }
+                }
+            }
+
+            if (t >= 0) {
+                var dir = objs[i].velocity.normalize();
+
+                objs[i].position = objs[i].position.add(dir.mul(t));
+                objs[i].velocity = new Vector2(0, 0);
+
+                if (hit != null) {
+                    objs[i].collide(hit);
+                    hit.collide(objs[i]);
+                }
+            } else {
+                objs[i].position = objs[i].position.add(objs[i].velocity.mul(deltaTime));
+            }
+        }
     }
-
-
-
-	phys(obj2, obj1, deltaTime);
-
 
     pInput = Object.assign(pInput, input);
 }

@@ -4,6 +4,7 @@ function GameObject(name) {
     this.position = new Vector2(0, 0); // Position in world space of object
     this.velocity = new Vector2(0, 0); // Velocity
     this.size = new Vector2(10, 10); // Width and Height of the object
+    this.canCollide = true; // Whether the object has collisions
 
     this.spriteSize = new Vector2(0, 0); // Size of sprite
     this.spriteOff = new Vector2(0, 0); // Offset of sprite from center of object
@@ -54,6 +55,7 @@ GameObject.prototype.draw = function(deltaTime) {
     var pos = this.position.sub(camPos);
     this.elem.style.left = scaleFact * (pos.x + this.spriteOff.x) + "px";
     this.elem.style.top = scaleFact * (pos.y + this.spriteOff.y) + "px";
+    this.elem.style.zIndex = Math.floor(this.position.y);
 
     if (colBoxes) {
         this.box.style.left = scaleFact * pos.x + "px";
@@ -62,7 +64,3 @@ GameObject.prototype.draw = function(deltaTime) {
             this.box.style.height = scaleFact * this.size.y - 2 + "px";
     }
 }
-
-
-
-var p = window["GameObject"]();

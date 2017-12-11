@@ -20,7 +20,6 @@ function Animator(animSet, obj) {
     this.sheet = new Vector2(animSet.sheet[0], animSet.sheet[1]);
 
     for (var a in animSet.anims) {
-        console.log(animSet.anims[a].nFrames);
         var anim = new Animation();
         anim.name = a;
         anim.nFrames = animSet.anims[a].nFrames;
@@ -45,9 +44,13 @@ function Animator(animSet, obj) {
 
 Animator.prototype.update = function(deltaTime, obj) {
 	this.timer += deltaTime;
-	
+
 	if (this.frame > this.anim.nFrames - 1) {
-		this.frame = 0;
+        if (this.anim.loop) {
+            this.frame = 0;
+        } else {
+            this.playing = false;
+        }
 	}
 
 	while (this.playing && this.timer >= this.anim.intervals[this.frame]) {
@@ -89,6 +92,55 @@ Animator.prototype.stop = function() {
     this.playing = false;
 }
 
+
+var gobAnim = {
+    "sheetURL": "assets/goblin_sheet.png",
+    "sheet":[220, 25], // Size of spritesheet in px
+    "cell":[22, 25],    // Size of each cell in px
+    "offset":[-3,-15],
+    "anims": {
+        "idle_down": {
+            "loop": true,
+            "nFrames": 1,
+            "intervals": [0.1],
+            "frames": [[4,0]] },
+        "idle_up": {
+            "loop": true,
+            "nFrames": 1,
+            "intervals": [0.1],
+            "frames": [[7,0]] },
+        "idle_left": {
+            "loop": true,
+            "nFrames": 1,
+            "intervals": [0.1],
+            "frames": [[1,0]] },
+        "idle_right": {
+            "loop": true,
+            "nFrames": 1,
+            "intervals": [0.1],
+            "frames": [[3,0]] },
+        "walk_left": {
+            "loop": true,
+            "nFrames": 2,
+            "intervals": [0.1, 0.1],
+            "frames": [[0,0], [1,0]] },
+        "walk_right": {
+            "loop": true,
+            "nFrames": 2,
+            "intervals": [0.1, 0.1],
+            "frames": [[2,0], [3,0]] },
+        "walk_down": {
+            "loop": true,
+            "nFrames": 4,
+            "intervals": [0.07, 0.07, 0.07, 0.07],
+            "frames": [[4,0], [5,0], [4,0], [6,0]] },
+        "walk_up": {
+            "loop": true,
+            "nFrames": 4,
+            "intervals": [0.07, 0.07, 0.07, 0.07],
+            "frames": [[7,0], [8,0], [7,0], [9,0]] },
+        }
+    };
 
 var linkAnim = {
     "sheetURL": "assets/link_sheet.png",

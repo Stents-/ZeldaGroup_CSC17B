@@ -41,8 +41,6 @@ function Player() {
       // 2 -> up
       // 3 -> left
 
-     this.elem.style.zIndex = 10;
-
      // TODO: Add inventory
 }
 
@@ -86,8 +84,10 @@ Player.prototype.update = function(deltaTime) {
              pos = new Vector2(-16, -15);
              size = new Vector2(20, 30);
          }
+
+         if (aud.playing) aud.stop();
 		 aud.play();
-		 
+
          // Create damage box
          var db = new DmgBox(this, 1/5, 10);
          db.position = this.position.add(pos);
@@ -171,58 +171,13 @@ Player.prototype.update = function(deltaTime) {
      // We multiply the move vector by the speed and deltaTime
      // We do deltaTime so that the movement will remain consistent despite frame rate fluctuation
      // Basically it means we move in units per second, not units per frame
-     move = move.mul(speed * deltaTime);
-
-     player.position = player.position.add(move); // Finally add the move vector to the player position
-
+     move = move.mul(speed);
+     this.velocity = move;
 
      EntityLiving.prototype.update.call(this, deltaTime);
 }
 
 Player.prototype.draw = function(deltaTime) {
-    // Animate the sprite
-     /*var offY = 0;
-     if (this.isAttacking) {
-          this.animTimer += deltaTime;
-          if (this.animTimer > 0.1) {
-               this.animStage = 1;
-          }
-          if (this.animTimer > 0.2) {
-               this.isAttacking = false;
-          }
-
-          offY = 60 + 24 * this.animStage;
-          switch (this.dir) {
-               // See GameObject.js to explain all this weird math
-               case 0: this.spriteOff = new Vector2(0, offY / 168 * 100); break;
-               case 1: this.spriteOff = new Vector2(30 / 97 * 100, offY / 168 * 100); break;
-               case 2: this.spriteOff = new Vector2(60 / 97 * 100, offY / 168 * 100); break;
-               case 3: this.spriteOff = new Vector2(30 / 97 * 100, offY / 168 * 100); break;
-          }
-
-     } else {
-
-          if (this.isWalking) {
-               this.animTimer += deltaTime;
-               if (this.animTimer > 0.2) {
-                    this.animTimer -= 0.2;
-                    this.animStage = !this.animStage;
-               }
-
-               offY = 30 * this.animStage;
-          } else {
-               this.animTimer = 0;
-          }
-
-
-          switch (this.dir) {
-               case 0: this.spriteOff = new Vector2(0, offY / 168 * 100); break;
-               case 1: this.spriteOff = new Vector2(30 / 97 * 100, offY / 168 * 100); break;
-               case 2: this.spriteOff = new Vector2(60 / 97 * 100, offY / 168 * 100); break;
-               case 3: this.spriteOff = new Vector2(30 / 97 * 100, offY / 168 * 100); break;
-          }
-     }*/
-
     this.animator.play();
     this.animator.update(deltaTime, this);
 

@@ -8,7 +8,7 @@ function Tile(classN, _offX, _offY) {
 var enemMap1 = {
 	pos: [ [1,1], [10, 7] ],
 	enemies: [ "Enemy1", "Enemy2"],
-	
+
 };
 
 var mapArray=[  [3, 4, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0,11, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -58,54 +58,69 @@ function drawMap(){
 	cont.style.width = mapArray[0].length * 16 * scaleFact;
 
 	for (var i = 0; i < mapArray.length; i++) {
+        collisionMap.push([]);
 		for (var j = 0; j < mapArray[i].length; j++) {
       var t;
 			if(mapArray[i][j] == 0) {
 				t = new Tile("grass", -3, 0);
-				collisionMap.push(false);
+				collisionMap[i].push(false);
 			} else if(mapArray[i][j] == 1) {
 				t = new Tile("bush", -3, -1);
-				collisionMap.push(true);
+				collisionMap[i].push(false);
 			} else if(mapArray[i][j] == 2) {
 				t = new Tile("dirt", -1, -1);
+				collisionMap[i].push(false);
 			} else if(mapArray[i][j] == 3) {
 				t = new Tile("dirt", 0, 0);
+				collisionMap[i].push(false);
 			} else if(mapArray[i][j] == 4) {
 				t = new Tile("dirt", -1, 0);
+				collisionMap[i].push(false);
 			} else if(mapArray[i][j] == 5) {
 				t = new Tile("dirt", -2, 0);
+				collisionMap[i].push(false);
 			} else if(mapArray[i][j] == 6) {
 				t = new Tile("dirt", 0, -1);
+				collisionMap[i].push(false);
 			} else if(mapArray[i][j] == 7) {
 				t = new Tile("dirt", -2, -1);
+				collisionMap[i].push(false);
 			} else if(mapArray[i][j] == 8) {
 				t = new Tile("dirt", 0, -2);
+				collisionMap[i].push(false);
 			} else if(mapArray[i][j] == 9) {
 				t = new Tile("dirt", -1, -2);
+				collisionMap[i].push(false);
 			} else if(mapArray[i][j] == 10) {
 				t = new Tile("dirt", -2, -2);
+				collisionMap[i].push(false);
 			} else if(mapArray[i][j] == 11) {
 				t = new Tile("dirt", -3, -4);
+				collisionMap[i].push(false);
 			} else if(mapArray[i][j] == 12) {
 				t = new Tile("dirt", -2, 4);
-				collisionMap.push(true);
+				collisionMap[i].push(true);
 			} else if(mapArray[i][j] == 13) {
 				t = new Tile("dirt", -3, 4);
-				collisionMap.push(true);
+				collisionMap[i].push(true);
 			} else if(mapArray[i][j] == 14) {
 				t = new Tile("dirt", -2, 3);
-				collisionMap.push(true);
+				collisionMap[i].push(true);
 			} else if(mapArray[i][j] == 15) {
 				t = new Tile("dirt", -3, 3);
-				collisionMap.push(true);
+				collisionMap[i].push(true);
 			} else if(mapArray[i][j] == 16) {
 				t = new Tile("dirt", 0, -3);
+				collisionMap[i].push(false);
 			} else if(mapArray[i][j] == 17) {
 				t = new Tile("dirt", -1, -3);
+				collisionMap[i].push(false);
 			} else if(mapArray[i][j] == 18) {
 				t = new Tile("dirt", 0, -4);
+				collisionMap[i].push(false);
 			} else if(mapArray[i][j] == 19) {
 				t = new Tile("dirt", -1, -4);
+				collisionMap[i].push(false);
 			}
 
       t.elem.style.width = scaleFact * 16 + "px";
