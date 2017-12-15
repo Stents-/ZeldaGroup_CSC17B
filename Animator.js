@@ -142,6 +142,20 @@ var gobAnim = {
         }
     };
 
+var poofAnim = {
+    "sheetURL": "assets/poof_sheet.png",
+    "sheet":[182, 32], // Size of spritesheet in px
+    "cell":[26, 32],    // Size of each cell in px
+    "offset":[0,0],
+    "anims": {
+        "poof": {
+            "loop": false,
+            "nFrames": 7,
+            "intervals": [0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05],
+            "frames": [[0,0], [1,0], [2,0], [3,0], [4,0], [5,0], [6,0]] },
+	}
+};
+	
 var linkAnim = {
     "sheetURL": "assets/link_sheet.png",
     "sheet":[432, 384], // Size of spritesheet in px

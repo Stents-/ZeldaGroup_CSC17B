@@ -4,7 +4,7 @@
 // Maybe eventually move to its own file
 function EntityLiving() {
      GameObject.call(this);
-     this.health = 10;
+     this.health = 30;
      this.immunity = 0; // immunity timer
 	 this.moveSpeed = 100;
 }
@@ -15,18 +15,63 @@ EntityLiving.prototype.constructor = EntityLiving;
 
 // Just damage the living entity
 EntityLiving.prototype.damage = function(amount) {
-    if (this.immunity > 0) {
+    if (this.immunity <= 0) {
          this.health -= amount;
-         this.immunity = 2;
+         this.immunity = 1;
+		 this.hurtSound.play();
          if (this.health <= 0) {
               // Entity dead
               // Do something
+			  var an = new AnBox(poofAnim, "poof");
+			  an.position = this.position.sub(new Vector2((an.size.x - this.size.x) / 2,(an.size.y - this.size.y) / 2));
+			  objs.push(an);
+			  delObject(this);
+			  enemyKilled.play();
          }
     }
 }
 
 EntityLiving.prototype.update = function(deltaTime) {
-    if (this.immunity > 0) this.immunity -= deltaTime;
+    //if (this.immunity > 0)
+}
+
+function hasClass(el, className) {
+    if (el.classList)
+        return el.classList.contains(className);
+    return !!el.className.match(new RegExp('(\\s|^)' + className + '(\\s|$)'));
+}
+
+function addClass(el, className) {
+    if (el.classList)
+        el.classList.add(className)
+    else if (!hasClass(el, className))
+        el.className += " " + className;
+}
+
+function removeClass(el, className) {
+    if (el.classList)
+        el.classList.remove(className)
+    else if (hasClass(el, className))
+    {
+        var reg = new RegExp('(\\s|^)' + className + '(\\s|$)');
+        el.className = el.className.replace(reg, ' ');
+    }
+}
+
+EntityLiving.prototype.draw = function(deltaTime) {
+    if (this.immunity > 0) {
+        var t = Math.floor(this.immunity * 9) % 2;
+        if (t == 1) {
+            addClass(this.elem, "damaged");
+        } else {
+            removeClass(this.elem, "damaged");
+        }
+
+
+        this.immunity -= deltaTime;
+    }
+
+    GameObject.prototype.draw.call(this, deltaTime);
 }
 
 function Player() {
@@ -34,8 +79,13 @@ function Player() {
      this.size = new Vector2(16, 10);
      this.animator = new Animator(linkAnim, this);
      this.animator.setAnim("idle_down");
+	 this.hurtSound = linkHurt;
+	 this.cooldown = 0;
+	 this.health = 100;
 
      this.dir = 0;                          // Represents the direction
+	 this.item = 0;
+	 this.qty = [12, 12, 12];
       // 0 -> down
       // 1 -> right
       // 2 -> up
@@ -54,6 +104,12 @@ Player.prototype.constructor = Player;
 
 	objs.push(b);
 }*/
+
+Player.prototype.damage = function(amount) {
+	EntityLiving.prototype.damage.call(this, amount);
+	
+	LifeBar(Math.floor(this.health / 10));
+}
 
 Player.prototype.update = function(deltaTime) {
 	 var speed = this.moveSpeed;
@@ -85,8 +141,8 @@ Player.prototype.update = function(deltaTime) {
              size = new Vector2(20, 30);
          }
 
-         if (aud.playing) aud.stop();
-		 aud.play();
+         if (swordSlash.playing) swordSlash.stop();
+		 swordSlash.play();
 
          // Create damage box
          var db = new DmgBox(this, 1/5, 10);
@@ -97,13 +153,77 @@ Player.prototype.update = function(deltaTime) {
      }
 
 
-	 if (input.use && !pInput.use) {
+	 if (input.use && !pInput.use && this.cooldown <= 0) {
+
+		 var pos;
+         if (this.dir == 0) {
+             pos = new Vector2(2, 14);
+         } else if (this.dir == 1) {
+             pos = new Vector2(20, -1);
+         } else if (this.dir == 2) {
+             pos = new Vector2(2, -14);
+         } else if (this.dir == 3) {
+             pos = new Vector2(-16, -1);
+         }
+         
+         var btemp = {position: this.position.add(pos), size: new Vector2(12, 12)};
+         var col = false;
+
+         for (var j = 0; j < collisionMap.length; j++) {
+             for (var k = 0; k < collisionMap[j].length; k++) {
+                 if (collisionMap[j][k] == true) {
+                     // Create a spoof gameobject for the collides function
+                     var temp = {position: new Vector2(k * 16, j * 16), size: new Vector2(16, 16)};
+                     if (collides(btemp, temp) == true) {
+                         col = true;
+                         break;
+                     }
+                 }
+             }
+         }
+
+         if (col == false) {
+			 if (this.item != 2) {
+				 if (this.qty[this.item] > 0) {
+					 this.cooldown = 2;
+					 var _bomb;
+					 if (this.item == 0) {
+						 _bomb = new Bomb();
+					 bombDrop.play();
+					 }
+					 else if (this.item == 1) {
+						 _bomb = new Arrow(this.dir);
+						 arrowShoot.play();
+					 }
+					 _bomb.position = btemp.position;
+					 objs.push(_bomb);
+					 this.qty[this.item] -= 1;
+					 ItemBar(this.item, this.qty[this.item]);
+					 ItemHUD();
+				 }
+			 } else {
+				 if (this.qty[2] > 0) {
+					 this.health += 10;
+					 if (this.health > 100) this.health = 100;
+					 LifeBar(Math.floor(this.health / 10));
+					 this.qty[2] -= 1;
+					 ItemBar(this.item, this.qty[2]);
+					 ItemHUD();
+					 potionHeal.play();
+				 }
+			 }
+         } else {
+             pauseOpen.play();
+         }
+
 		 /*// Call item function
 		 if (bow equiped) {
 			 // Bow function
 		 } else if (bomb equipped) {
 			 // Bomb function
 		 }*/
+	 } else {
+		 this.cooldown -= deltaTime;
 	 }
 
      if (this.animator.anim.name.startsWith("attack") && this.animator.playing == false) {
@@ -172,7 +292,8 @@ Player.prototype.update = function(deltaTime) {
      // We do deltaTime so that the movement will remain consistent despite frame rate fluctuation
      // Basically it means we move in units per second, not units per frame
      move = move.mul(speed);
-     this.velocity = move;
+     if (this.immunity <= 0.75)
+        this.velocity = move;
 
      EntityLiving.prototype.update.call(this, deltaTime);
 }
@@ -184,5 +305,5 @@ Player.prototype.draw = function(deltaTime) {
  	this.elem.style.backgroundPosition = -this.sprite.x + "px " + -this.sprite.y + "px";
 
     // Call the base version of the draw
-    GameObject.prototype.draw.call(this, deltaTime);
+    EntityLiving.prototype.draw.call(this, deltaTime);
 }

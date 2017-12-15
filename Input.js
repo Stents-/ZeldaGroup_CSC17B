@@ -31,7 +31,7 @@ document.addEventListener('keydown', function(event) {
          input.up = true;
     } else if(event.keyCode == 32) {
          input.attack = true;
-    } else if(event.keyCode == 16) {
+    } else if(event.keyCode == 90) {
          input.use = true;
     }
 });
@@ -47,7 +47,7 @@ document.addEventListener('keyup', function(event) {
          input.up = false;
     } else if(event.keyCode == 32) {
          input.attack = false;
-    } else if(event.keyCode == 16) {
+    } else if(event.keyCode == 90) {
          input.use = false;
     }
 });

@@ -21,17 +21,6 @@ body {
 .damaged {
     filter: grayscale(100%) sepia(100%) hue-rotate(315deg) saturate(700%) brightness(80%);
 }
-/* Flip horizontally
-   Literally just flips the image horizontally
-*/
-.flipH {
-	-moz-transform: scaleX(-1);
-	-o-transform: scaleX(-1);
-	-webkit-transform: scaleX(-1);
-	transform: scaleX(-1);
-	filter: FlipH;
-	-ms-filter: "FlipH";
-}
 
 #map{
 	position: absolute;

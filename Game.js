@@ -1,10 +1,11 @@
 var lastTime; // Used to calculate deltaTime
 
 var objs = []; // List of all GameObjects
+var delList = [];
 
 var scaleFact; // Amount to scale
 
-var colBoxes = true;
+var colBoxes = false;
 
 // Calculate the scaling factor
 function calcScaling() {
@@ -41,7 +42,7 @@ function calcScaling() {
 		for (var i = 0; i < tiles.length; i++) {
 			tiles[i].elem.style.width = scaleFact * 16 + "px";
 			tiles[i].elem.style.height = scaleFact * 16 + "px";
-			tiles[i].elem.style.backgroundSize = scaleFact * 16 * 16 + "px " + scaleFact * 16 * 13 + "px";
+			tiles[i].elem.style.backgroundSize = scaleFact * 16 * 16 + "px " + scaleFact * 16 * 16 + "px";
 			tiles[i].elem.style.backgroundPosition = scaleFact * 16 * tiles[i].offX + "px " + scaleFact * 16 * tiles[i].offY + "px";
 		}
 
@@ -61,7 +62,8 @@ function calcScaling() {
 
 window.onload = function () {
 	calcScaling();
-	drawMap();
+	entMain(0);
+	dungeon.musicPlay()
 }
 
 window.onresize = calcScaling;
@@ -70,43 +72,32 @@ window.onresize = calcScaling;
 var player = new Player("Player");
 objs.push(player);
 
-var obj1 = new GameObject("one");
-obj1.size = new Vector2(10, 10);
-obj1.position = new Vector2(30, 100);
-//obj1.velocity = new Vector2(140, -20);
-obj1.elem.style.backgroundColor = "blue";
-obj1.elem.style.width = (obj1.size.x * scaleFact) + "px";
-obj1.elem.style.height = (obj1.size.y * scaleFact) + "px";
-
-var obj2 = new GameObject("two");
-obj2.size = new Vector2(10, 10);
-obj2.position = new Vector2(100, 90);
-obj2.velocity = new Vector2(-140, 20);
-obj2.elem.style.backgroundColor = "red";
-obj2.elem.style.width = obj2.size.x * scaleFact + "px";
-obj2.elem.style.height = obj2.size.y * scaleFact + "px";
-objs.push(obj1);
-objs.push(obj2);
-
-var gob = new Goblin();
-gob.position = new Vector2(300, 100);
-objs.push(gob);
-
 // Camera position
 var camPos = new Vector2(0, 0);
 
 
 function delObject(obj) {
-
-    document.body.removeChild(obj.elem);
-
-    if (colBoxes) {
-        document.body.removeChild(obj.box);
-    }
-
-    objs.splice(objs.indexOf(obj), 1);
+	if (obj.active) {
+		obj.active = false;
+		delList.push(obj);
+	}
 }
 
+function cullObjects() {
+	for (var i = 0; i < delList.length; i++) {
+		document.body.removeChild(delList[i].elem);
+
+		if (colBoxes) {
+			document.body.removeChild(delList[i].box);
+		}
+
+		objs.splice(objs.indexOf(delList[i]), 1);
+		//console.log("object deleted");
+	}
+	
+	// Clear the list
+	delList = [];
+}
 
 // All game logic, physics, input, ai, etc
 function update(deltaTime) {
@@ -114,9 +105,11 @@ function update(deltaTime) {
         objs[i].update(deltaTime);
     }
 
+	cullObjects();
+	
     // Physics
+    var dt = deltaTime;
 	for (i = 0; i < objs.length; i++) {
-
 
         if (objs[i].canCollide == false) {
             for (j = 0; j < objs.length; j++) {
@@ -127,14 +120,14 @@ function update(deltaTime) {
                     }
                 }
             }
-        } else {
+        } else if (objs[i].velocity.x != 0 || objs[i].velocity.y != 0){
 
-            var t = -1;
+            var t = {t:-1, ax: false};
             var hit;
             for (j = 0; j < objs.length; j++) {
                 if (i != j && objs[j].canCollide == true) {
-                    var _t = phys(objs[i], objs[j], deltaTime);
-                    if (_t >= 0 && (_t < t || t < 0)) {
+                    var _t = phys(objs[i], objs[j], dt);
+                    if (_t.t >= 0 && (_t.t < t.t || t.t < 0)) {
                         t = _t;
                         hit = objs[j];
                     }
@@ -146,8 +139,8 @@ function update(deltaTime) {
                     if (collisionMap[j][k] == true) {
                         // Create a spoof gameobject for the phys function
                         var temp = {position: new Vector2(k * 16, j * 16), size: new Vector2(16,16)};
-                        var _t = phys(objs[i], temp, deltaTime);
-                        if (_t >= 0 && (_t < t || t < 0)) {
+                        var _t = phys(objs[i], temp, dt);
+                        if (_t.t >= 0 && (_t.t < t.t || t.t < 0)) {
                             t = _t;
                             hit = null;
                         }
@@ -155,22 +148,45 @@ function update(deltaTime) {
                 }
             }
 
-            if (t >= 0) {
+            var mag = objs[i].velocity.magnitude();
+            if (t.t >= 0 && mag > 0) {
                 var dir = objs[i].velocity.normalize();
 
-                objs[i].position = objs[i].position.add(dir.mul(t));
-                objs[i].velocity = new Vector2(0, 0);
+                objs[i].position = objs[i].position.add(dir.mul(t.t));
 
+                // Check the axis the collision happened on
+                if (t.ax) {
+                    objs[i].velocity.y = 0;
+                } else {
+
+                    objs[i].velocity.x = 0;
+                    //objs[i].velocity.y = 100;// objs[i].velocity.y * (1- Math.abs(dir.y));
+                }
+
+                // If collision was with another obj, call the collide function
+				objs[i].collide(hit);
                 if (hit != null) {
-                    objs[i].collide(hit);
                     hit.collide(objs[i]);
                 }
+
+
+                // Basically repeat collision for this obj until dt <= 0
+                dt -= dt * (t.t/mag);
+                if (dt > 0) {
+                    i--;
+                    continue;
+                }
+
             } else {
-                objs[i].position = objs[i].position.add(objs[i].velocity.mul(deltaTime));
+                //if (mag > 0) console.log("no t + " + t.t);
+                objs[i].position = objs[i].position.add(objs[i].velocity.mul(dt));
             }
         }
+        dt = deltaTime;
     }
 
+	cullObjects();
+	
     pInput = Object.assign(pInput, input);
 }
 
@@ -207,6 +223,7 @@ function draw(deltaTime) {
 
     // TODO: Map drawing
 }
+var slow = false;
 
 // Main loop function
 // Called as often as it can be
@@ -223,9 +240,11 @@ function loop() {
     }
     lastTime = Date.now();
 
+    if (slow == true) deltaTime /= 58;
+
     // Get the fps, just cause
     var fps = 1 / deltaTime;
-    if (fps < 40) console.log("Stutter " + deltaTime * 1000 + " ms " + fps + " fps");
+    //if (fps < 40) console.log("Stutter " + deltaTime * 1000 + " ms " + fps + " fps");
 
     // Call the update function, all game logic, physics, input, ai, etc
     update(deltaTime);

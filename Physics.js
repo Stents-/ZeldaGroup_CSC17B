@@ -42,6 +42,7 @@ function phys(obj1, obj2, deltaTime) {
                 if (t >= 0) t1 = t;
             }
         } else if (oldPos.y + obj1.size.y <= obj2.position.y) {
+            //if(obj1 == player) console.log("down");
             // Check for intersection on upper horiz line
             var top = obj2.position.y; // top of obstacle
             var dir = obj1.velocity.normalize(); // Direction of the movement
@@ -93,16 +94,14 @@ function phys(obj1, obj2, deltaTime) {
                 if (t >= 0) t2 = t;
             }
         }
-
-
     }
 
     obj1.position = oldPos;
     if((t1 < t2 || t2 == undefined) && t1 != undefined) {
-        return t1;
+        return {t: t1, ax: true};
     } else if (t2 != undefined) {
-        return t2;
+        return {t: t2, ax: false};
     }
 
-    return -1;
+    return {t: -1, ax: false};
 }

@@ -1,6 +1,7 @@
 // Basic GameObject class to represent all on-screen entities
 function GameObject(name) {
     this.name = name;                      // Simple name identifier
+	this.active = true;
     this.position = new Vector2(0, 0); // Position in world space of object
     this.velocity = new Vector2(0, 0); // Velocity
     this.size = new Vector2(10, 10); // Width and Height of the object
